@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Antithrombotic timing — ESAIC/ESRA</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0B6E6B">
+<meta name="theme-color" content="#1E3A8A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Antithrombotic">
@@ -16,20 +16,14 @@
    THEME — change colours here if you like
    ============================================================ */
 :root{
-  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#18212B; --muted:#5C6672; --line:#DDE2DC;
-  --teal:#0B6E6B; --teal-soft:#E3F1EF; --amber:#9A6A0F; --amber-soft:#FBF1D8;
+  --bg:#FFFFFF; --paper:#FFFFFF; --ink:#111827; --muted:#4B5563; --line:#D9DEE7;
+  --teal:#1E3A8A; --teal-soft:#E8EDF8; --amber:#9A6A0F; --amber-soft:#FBF1D8;
   --red:#A8281F; --red-soft:#FBE4E1; --ok:#2E6B3A; --ok-soft:#E4F2E6;
   --radius:10px; --w:1040px;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#121715; --paper:#1B2321; --ink:#EEF2EF; --muted:#9BA7A1; --line:#2E3A36;
-    --teal:#5FC3BE; --teal-soft:#15302E; --amber:#E2B55A; --amber-soft:#3A2E12;
-    --red:#F08A80; --red-soft:#3D1A17; --ok:#8CD39A; --ok-soft:#163B20;
-  }
-}
+/* Light theme always (white background, dark blue accent). To restore automatic dark mode, see the git history. */
 *{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
@@ -74,7 +68,7 @@ header p.sub{margin:0;color:var(--muted);font-size:.95rem}
 .dose h4 small{font-weight:400;color:var(--muted)}
 .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 @media (max-width:720px){.cols{grid-template-columns:1fr}}
-.cell{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:.93rem}
+.cell{background:#F3F5F9;border-radius:8px;padding:10px 12px;font-size:.93rem}
 .cell .lbl{font-size:.78rem;color:var(--muted);margin-bottom:3px}
 .cell .val{font-weight:700;font-size:1.05rem;color:var(--teal)}
 .cell .val.red{color:var(--red)}
