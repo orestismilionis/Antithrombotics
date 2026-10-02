@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antithrombotic timing — ESAIC/ESRA</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B6E6B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Antithrombotic">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Peri-operative antithrombotic interruption and resumption intervals: ESAIC/ESRA 2022 (regional anaesthesia) and ESAIC 2023 (surgical bleeding).">
+<style>
+/* ============================================================
+   THEME — change colours here if you like
+   ============================================================ */
+:root{
+  --bg:#F6F7F4; --paper:#FFFFFF; --ink:#18212B; --muted:#5C6672; --line:#DDE2DC;
+  --teal:#0B6E6B; --teal-soft:#E3F1EF; --amber:#9A6A0F; --amber-soft:#FBF1D8;
+  --red:#A8281F; --red-soft:#FBE4E1; --ok:#2E6B3A; --ok-soft:#E4F2E6;
+  --radius:10px; --w:1040px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121715; --paper:#1B2321; --ink:#EEF2EF; --muted:#9BA7A1; --line:#2E3A36;
+    --teal:#5FC3BE; --teal-soft:#15302E; --amber:#E2B55A; --amber-soft:#3A2E12;
+    --red:#F08A80; --red-soft:#3D1A17; --ok:#8CD39A; --ok-soft:#163B20;
+  }
+}
+*{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+a{color:var(--teal)}
+.wrap{max-width:var(--w);margin:0 auto;padding:20px 16px 60px}
+
+header h1{font-size:1.55rem;margin:0 0 4px;letter-spacing:-.01em}
+header p.sub{margin:0;color:var(--muted);font-size:.95rem}
+
+.tabs{display:flex;gap:6px;margin:22px 0 14px;border-bottom:2px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:10px 14px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--teal);border-bottom-color:var(--teal)}
+.tabs button:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:6px}
+
+.controls{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:flex-end;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:18px}
+.controls label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--paper);color:var(--ink);border:0;padding:8px 12px;font:inherit;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
+.seg button:focus-visible{outline:3px solid var(--teal);outline-offset:-3px}
+.controls input[type=search]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);min-width:220px}
+
+.note{font-size:.9rem;color:var(--muted);margin:0 0 14px}
+.banner{border-left:4px solid var(--amber);background:var(--amber-soft);color:var(--ink);padding:10px 14px;border-radius:0 8px 8px 0;font-size:.9rem;margin:0 0 18px}
+
+.group-h{font-size:.8rem;font-weight:700;letter-spacing:.04em;color:var(--muted);margin:22px 0 8px}
+
+.drug{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.drug summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.drug summary::-webkit-details-marker{display:none}
+.drug summary:focus-visible{outline:3px solid var(--teal);outline-offset:-3px}
+.drug summary .name{font-weight:700;font-size:1.05rem}
+.drug summary .agents{color:var(--muted);font-size:.9rem}
+.drug summary .quick{margin-left:auto;font-size:.9rem;color:var(--teal);font-weight:600;white-space:nowrap}
+.drug[open] summary{border-bottom:1px solid var(--line)}
+.drug .body{padding:4px 16px 14px}
+
+.dose{padding:12px 0;border-top:1px dashed var(--line)}
+.dose:first-child{border-top:0}
+.dose h4{margin:0 0 8px;font-size:.98rem}
+.dose h4 small{font-weight:400;color:var(--muted)}
+.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media (max-width:720px){.cols{grid-template-columns:1fr}}
+.cell{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:.93rem}
+.cell .lbl{font-size:.78rem;color:var(--muted);margin-bottom:3px}
+.cell .val{font-weight:700;font-size:1.05rem;color:var(--teal)}
+.cell .val.red{color:var(--red)}
+.cell .val.ok{color:var(--ok)}
+.cell p{margin:4px 0 0}
+.renal{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--amber-soft);border-left:3px solid var(--amber);font-size:.9rem}
+.renal.active{outline:2px solid var(--amber)}
+.extra{font-size:.9rem;color:var(--muted);margin:8px 0 0}
+.grade{display:inline-block;font-size:.72rem;font-weight:700;padding:1px 6px;border-radius:5px;background:var(--teal-soft);color:var(--teal);vertical-align:middle;margin-left:4px}
+
+table.ref{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--paper)}
+table.ref th,table.ref td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.ref th{background:var(--bg)}
+.scroll{overflow-x:auto}
+
+footer{margin-top:36px;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:6px 0}
+.hidden{display:none!important}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.drug .body{animation:fade .18s ease-out}@keyframes fade{from{opacity:0}to{opacity:1}}}
+@media print{.controls,.tabs{display:none}.drug{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Antithrombotic timing</h1>
+  <p class="sub">Interruption and resumption intervals for anticoagulants and antiplatelet agents — ESAIC/ESRA 2022 (regional anaesthesia) and ESAIC 2023 (surgical bleeding).</p>
+</header>
+
+<div class="tabs" role="tablist">
+  <button role="tab" id="tab-regional" aria-selected="true" aria-controls="panel-regional">Regional anaesthesia</button>
+  <button role="tab" id="tab-surgical" aria-selected="false" aria-controls="panel-surgical">Surgical interruption</button>
+  <button role="tab" id="tab-ref" aria-selected="false" aria-controls="panel-ref">Dose definitions</button>
+</div>
+
+<div class="controls">
+  <div id="ctl-block">
+    <label>Block type</label>
+    <div class="seg" id="seg-block">
+      <button aria-pressed="true" data-v="high">Neuraxial / deep block</button>
+      <button aria-pressed="false" data-v="low">Superficial block</button>
+    </div>
+  </div>
+  <div id="ctl-proc" class="hidden">
+    <label>Procedure bleeding risk</label>
+    <div class="seg" id="seg-proc">
+      <button aria-pressed="false" data-v="low">Low</button>
+      <button aria-pressed="true" data-v="high">Intermediate / high</button>
+    </div>
+  </div>
+  <div id="ctl-renal">
+    <label>Creatinine clearance (Cockcroft–Gault)</label>
+    <div class="seg" id="seg-renal">
+      <button aria-pressed="true" data-v="normal">&gt; 50 ml/min</button>
+      <button aria-pressed="false" data-v="mod">30–50</button>
+      <button aria-pressed="false" data-v="severe">&lt; 30</button>
+    </div>
+  </div>
+  <div>
+    <label for="q">Find a drug</label>
+    <input id="q" type="search" placeholder="e.g. apixaban, enoxaparin">
+  </div>
+</div>
+
+<p class="banner" id="banner"></p>
+
+<section id="panel-regional" role="tabpanel" aria-labelledby="tab-regional"></section>
+<section id="panel-surgical" role="tabpanel" aria-labelledby="tab-surgical" class="hidden"></section>
+<section id="panel-ref" role="tabpanel" aria-labelledby="tab-ref" class="hidden"></section>
+
+<footer id="footer"></footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA — this is the only block you normally need to edit.
+   ------------------------------------------------------------
+   Each drug has one or more "doses". For every dose:
+     before : time from last intake/administration to the procedure
+     lab    : target laboratory value at the procedure ("" = none)
+     after  : time from procedure to the next dose
+     renal  : optional object with keys "mod" (CrCl 30–50) and/or
+              "severe" (CrCl <30). Text shown and highlighted when
+              that renal setting is selected.
+     grade  : GRADE strength/quality as printed in the guideline
+     notes  : free text shown under the row (optional)
+   Keep the text short; the UI is built for quick bedside reading.
+   ============================================================ */
+const DATA = {
+  version: "2026-10-02",
+  editor: "Orestis Milionis, MD — 2nd Dept of Anaesthesiology, Attikon University Hospital",
+  disclaimer: "Decision support only. Verify against the current guideline text and your institutional protocol, and apply individual risk–benefit assessment. Time intervals are from the published tables; they do not replace clinical judgement.",
+
+  sources: [
+    { key:"ESAIC/ESRA 2022", text:"Kietaibl S, Ferrandis R, Godier A, et al. Regional anaesthesia in patients on antithrombotic drugs: Joint ESAIC/ESRA guidelines. Eur J Anaesthesiol 2022;39:100–132. DOI 10.1097/EJA.0000000000001600 (Tables 1, 3, 4; R1–R40).",
+      url:"https://esraeurope.org/wp-content/uploads/2022/01/Regional-anaesthesia-in-patients-on-antithrombotic.4.pdf" },
+    { key:"ESAIC 2023", text:"Kietaibl S, Ahmed A, Afshari A, et al. Management of severe peri-operative bleeding: Guidelines from the ESAIC, second update 2022. Eur J Anaesthesiol 2023;40:226–304. DOI 10.1097/EJA.0000000000001803 (Table 2, R2).",
+      url:"https://journals.lww.com/ejanaesthesiology/fulltext/2023/04000/management_of_severe_peri_operative_bleeding_.2.aspx" }
+  ],
+
+  /* ---------- TAB 1: regional anaesthesia (ESAIC/ESRA 2022, Table 3 / Table 4) ---------- */
+  regional: {
+    generalHigh: [
+      "Applies to neuraxial blocks and deep (non-compressible) peripheral blocks, and equally to needle insertion, catheter insertion and catheter removal (R36).",
+      "Drug combinations: use the interval of the drug with the longest interval (R19). Low-dose aspirin adds 0 h.",
+      "Ultrasound guidance and bleeding-risk scores do not change the intervals (R22, R35).",
+      "Bloody tap: consider a longer interval to the next dose (R39). Monitor neurology ≥ 24 h after neuraxial/deep blocks (R40).",
+      "Next-dose timing follows VTE-prophylaxis / therapeutic-anticoagulation guidance: low doses ≈ 6 h post-op (8 h − t<sub>max</sub>), high doses ≈ 24 h post-op. VKA, DOAC, high-dose LMWH and high-dose UFH should not be given with a neuraxial catheter in situ."
+    ],
+    generalLow: [
+      "Superficial, compressible blocks (e.g. axillary, interscalene, femoral, adductor canal, popliteal sciatic, TAP, fascia iliaca — see Table 2 of the guideline): withdrawal of antithrombotic drugs is not compulsory (Table 4).",
+      "Time from last intake: zero for low-dose agents; zero for VKA, high-dose LMWH/UFH, high-dose aspirin, P2Y12 inhibitors and combinations provided the patient is within or below their individual therapeutic range.",
+      "Next dose: at the routinely prescribed next time point. No routine testing (consider a drug level if accumulation is suspected, e.g. renal insufficiency).",
+      "Still perform an individual risk–benefit assessment, choose the lowest-bleeding-risk technique and use ultrasound (R37, R38)."
+    ],
+    drugs: [
+      { group:"Vitamin K antagonists", name:"VKA", agents:"warfarin, acenocoumarol, phenprocoumon, fluindione",
+        doses:[{ label:"Any target INR",
+          before:"Until INR normal — about 3 d acenocoumarol, 5 d warfarin / fluindione, 7 d phenprocoumon",
+          lab:"INR in the normal range of the local laboratory (e.g. 1.1). INR < 1.5 may be acceptable in individual patients after risk–benefit analysis (2C)",
+          after:"Per post-op VTE-prophylaxis / therapeutic guidance; with a neuraxial catheter in situ only after its removal (low-dose LMWH may bridge in the interim)",
+          grade:"1C / 2C", notes:"Reversal for emergency neuraxial/deep procedures: 4-factor PCC (INR-adjusted) + vitamin K 10 mg (R31, 2C)." }] },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — low dose", agents:"rivaroxaban 10 mg od · apixaban 2.5 mg bd · edoxaban (see dose definitions)",
+        doses:[{ label:"Low dose", before:"24 h rivaroxaban / edoxaban · 36 h apixaban", lab:"No testing",
+          after:"≈ 6 h post-op (per VTE-prophylaxis guidance); longer after a bloody tap. Catheter in situ: only after removal (low-dose LMWH/UFH may bridge)",
+          renal:{ severe:"CrCl < 30: rivaroxaban / edoxaban ≥ 30 h" }, grade:"1C" }] },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — high dose", agents:"rivaroxaban 15–20 mg · apixaban 5 mg bd (10 mg bd loading) · edoxaban 30–60 mg",
+        doses:[{ label:"High dose", before:"72 h, or until target laboratory value",
+          lab:"Drug level < 30 ng/ml (alternative: anti-Xa ≤ 0.1 IU/ml) — may shorten or lengthen the interval (R26, 2C)",
+          after:"≈ 24 h post-op (therapeutic guidance). Not with a neuraxial catheter in situ",
+          renal:{ severe:"CrCl < 30: proceed only when the calibrated assay is within the local normal range (2C)" }, grade:"1C",
+          notes:"Andexanet alpha and PCC/aPCC do not shorten the intervals (R32)." }] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran — low dose", agents:"220 mg od (150 mg od if CrCl 30–50, age ≥ 75, or verapamil/amiodarone/quinidine)",
+        doses:[{ label:"Low dose", before:"48 h", lab:"No testing",
+          after:"≈ 6 h post-op (VTE-prophylaxis guidance). Catheter in situ: only after removal", grade:"1C" }] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran — high dose", agents:"150 mg bd · 110 mg bd",
+        doses:[{ label:"High dose", before:"72 h, or until target laboratory value",
+          lab:"Dabigatran level < 30 ng/ml, or thrombin time within the local normal range (R27, 2C)",
+          after:"≈ 24 h post-op. Not with a neuraxial catheter in situ",
+          renal:{ mod:"CrCl 30–50: proceed only when thrombin time / dabigatran level is within the local normal range (2C)", severe:"CrCl < 30: proceed only when the assay is within the local normal range; drug accumulates markedly" },
+          grade:"1C", notes:"Idarucizumab fully reverses dabigatran for emergency neuraxial/deep procedures (R32, 2C); PCC/aPCC do not change the interval." }] },
+
+      { group:"Heparins", name:"LMWH — low dose", agents:"≤ 50 IU anti-Xa/kg/day · enoxaparin 40 mg/day · dalteparin 5000 IU · tinzaparin 4500 IU · nadroparin 5700 IU",
+        doses:[{ label:"Low (prophylactic) dose", before:"12 h", lab:"No testing (consider anti-Xa in renal insufficiency, frail, elderly or very low body weight)",
+          after:"≈ 6 h post-op (VTE-prophylaxis guidance). Low dose may be continued with a neuraxial catheter in situ",
+          renal:{ severe:"CrCl < 30: halve the dose or double the interval to 24 h" }, grade:"1C",
+          notes:"Obstetrics: 10–12 h as in the non-pregnant population (R8)." }] },
+
+      { group:"Heparins", name:"LMWH — high dose", agents:"> 50 IU anti-Xa/kg/day (e.g. enoxaparin 1 mg/kg bd or 1.5 mg/kg od)",
+        doses:[{ label:"High (therapeutic) dose", before:"24 h, or until target laboratory value (especially if CrCl < 30)", lab:"Anti-Xa ≤ 0.1 IU/ml (R25, 2C)",
+          after:"≈ 24 h post-op. Not with a neuraxial catheter in situ — bridge with low dose until removal",
+          renal:{ severe:"CrCl < 30: halve the dose or double the interval to 48 h" }, grade:"1C" }] },
+
+      { group:"Heparins", name:"UFH — low dose", agents:"SC ≤ 200 IU/kg/day (e.g. 5000 IU bd–tds) · IV ≤ 100 IU/kg/day",
+        doses:[{ label:"Low dose", before:"4 h", lab:"No testing",
+          after:"Per VTE-prophylaxis guidance; 1 h after the block for IV UFH in vascular / cardiovascular surgery after risk–benefit analysis (2C). Low dose may continue with a catheter in situ",
+          grade:"1C" }] },
+
+      { group:"Heparins", name:"UFH — high dose", agents:"SC > 200 IU/kg/day · therapeutic IV infusion",
+        doses:[{ label:"High dose", before:"Until target laboratory value — about 6 h after IV, 12 h after SC", lab:"aPTT, anti-Xa or ACT within the local normal range",
+          after:"≈ 24 h post-op. Not with a neuraxial catheter in situ", grade:"2C",
+          notes:"Protamine fully reverses UFH for emergency procedures (R33); avoid protamine overdose." }] },
+
+      { group:"Heparins", name:"Fondaparinux — low dose", agents:"2.5 mg/day SC",
+        doses:[{ label:"Low dose", before:"36 h", lab:"No testing",
+          after:"Per VTE-prophylaxis guidance (EXPERT trial: 12 h after catheter removal)",
+          renal:{ mod:"CrCl < 50: ≥ 72 h, or reduce dose to 1.5 mg/day", severe:"CrCl < 50: ≥ 72 h, or reduce dose to 1.5 mg/day (contraindicated < 20 ml/min)" }, grade:"1C" }] },
+
+      { group:"Heparins", name:"Fondaparinux — high dose", agents:"> 2.5 mg/day (5–10 mg)", flag:"red",
+        doses:[{ label:"High dose", before:"Neuraxial procedures not recommended (1C). If unavoidable: about 4 days, until target laboratory value",
+          lab:"Calibrated anti-Xa ≤ 0.1 IU/ml", after:"Per therapeutic-anticoagulation guidance", grade:"1C / 2C" }] },
+
+      { group:"Antiplatelet agents", name:"Aspirin — low dose", agents:"< 200 mg/day", flag:"ok",
+        doses:[{ label:"Low dose", before:"0 — not a contraindication after risk–benefit analysis", lab:"No testing",
+          after:"Routinely prescribed next time point", grade:"1C",
+          notes:"Single-shot spinal preferred over epidural (R16). Avoid combining with NSAIDs peri-operatively." }] },
+
+      { group:"Antiplatelet agents", name:"Aspirin — high dose", agents:"≥ 200 mg/day",
+        doses:[{ label:"High dose", before:"3 days (normal platelet count) to 7 days", lab:"Consider platelet function test within local normal range (R30, 2C)",
+          after:"≥ 6 h", grade:"1C / 2C" }] },
+
+      { group:"Antiplatelet agents", name:"P2Y12 inhibitors", agents:"clopidogrel · prasugrel · ticagrelor",
+        doses:[
+          { label:"Clopidogrel", before:"5–7 days, or until platelet function test normal", lab:"Consider platelet function test (2C)",
+            after:"75 mg: without delay · 300 mg loading: ≥ 2 days. Catheter in situ: only after removal", grade:"1C / 2C" },
+          { label:"Prasugrel", before:"7 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C" },
+          { label:"Ticagrelor", before:"5 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C" }
+        ],
+        notes:"Deep blocks are contraindicated on P2Y12 inhibitors (R18). Loading doses (ACS) — do not perform neuraxial/deep blocks (R34). Catheter in situ when urgent DAPT/anticoagulation is needed: interdisciplinary management; a catheter can be removed immediately before a clopidogrel loading dose takes effect, or after bridging to tirofiban (stop 8 h) / cangrelor (stop 3 h) (R20)." },
+
+      { group:"Combinations", name:"Combined antithrombotic drugs", agents:"e.g. low-dose aspirin + anticoagulant, DAPT",
+        doses:[{ label:"Any combination", before:"Interval of the drug with the longest interval (aspirin low = 0 + the anticoagulant's interval)",
+          lab:"Specific test for the combined drug(s)", after:"Aspirin low: routine next time point. Combined therapeutic anticoagulant / antiplatelet: ≈ 24 h post-op", grade:"1C" }] }
+    ]
+  },
+
+  /* ---------- TAB 2: surgical interruption (ESAIC 2023, Table 2 R2) ---------- */
+  surgical: {
+    general: [
+      "Low-bleeding-risk procedures in the guideline: skin surgery, dental / stomatological procedures, gastric and colonic endoscopy (biopsy allowed, polypectomy not), most ophthalmological (anterior chamber / cataract) surgery.",
+      "Bridging: not suggested for VKA in low, moderate or high thrombotic risk (case-by-case only in very specific high-risk patients, 2C); not recommended for DOACs (1C); LMWH bridging of antiplatelet agents not recommended (1A).",
+      "Urgent / semi-urgent surgery on antiplatelet agents: multidisciplinary decision (1C); operate under aspirin + P2Y12 inhibitor if possible, or at least under aspirin (2C).",
+      "Assess creatinine clearance in every DOAC patient scheduled for surgery (1B)."
+    ],
+    drugs: [
+      { group:"Antiplatelet agents", name:"Aspirin", agents:"75–325 mg/day",
+        doses:[
+          { label:"Secondary prevention", before:"Continue peri-operatively in most settings, especially cardiac surgery (1C). Must be maintained for low and moderate bleeding-risk procedures (1B). May be interrupted only for very-high bleeding-risk procedures, and never in patients with coronary stents (1B)",
+            lab:"", after:"Resume as soon as possible post-op (1C)", grade:"1B / 1C",
+            notes:"Continue ≥ 4 weeks after bare-metal stent and 3–12 months after drug-eluting stent unless surgical bleeding risk on aspirin is unacceptable (1A). Intracranial surgery can be performed on low-dose aspirin (2C)." },
+          { label:"Primary prevention", before:"Discontinue pre-operatively (1B)", lab:"", after:"Per indication", grade:"1B" },
+          { label:"If withdrawal is decided", before:"3 days from last intake to surgery; 5 days could be considered for invasive procedures at high bleeding risk", lab:"", after:"As soon as possible post-op", grade:"1C" }
+        ] },
+
+      { group:"Antiplatelet agents", name:"P2Y12 inhibitors", agents:"clopidogrel · prasugrel · ticagrelor",
+        doses:[
+          { label:"Clopidogrel", before:"≥ 5 days from last intake, if clinically feasible and the patient is not at high ischaemic risk", lab:"Platelet function testing may guide timing in cardiac surgery (B)",
+            after:"Resume early, within 24–72 h, same agent; no recommendation on loading dose", grade:"2B / 2C" },
+          { label:"Ticagrelor", before:"≥ 5 days", lab:"Platelet transfusion ineffective if ticagrelor given within 12–24 h (C)", after:"Within 24–72 h, same agent", grade:"2B / 2C" },
+          { label:"Prasugrel", before:"≥ 7 days", lab:"", after:"Within 24–72 h, same agent", grade:"2B / 2C" }
+        ],
+        notes:"Continue P2Y12 inhibitor ≥ 4 weeks after bare-metal stent and 3–6 months after drug-eluting stent (2A). Elective non-cardiac surgery is postponed until the full DAPT course is complete (1A). If interruption is unacceptable (high thrombotic risk), bridging with cangrelor or a short-acting GP IIb/IIIa inhibitor may be considered (2C). No NSAIDs with DAPT; coxibs are possible (1C)." },
+
+      { group:"Vitamin K antagonists", name:"VKA", agents:"warfarin, acenocoumarol, phenprocoumon",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Do not interrupt (skin, dental, endoscopy without polypectomy, cataract)", lab:"", after:"—", grade:"1C" },
+          { label:"Procedure requiring INR < 1.5", before:"3–5 days from last intake (all thrombotic-risk categories). If INR > 1.5 on the day before surgery: vitamin K 5 mg orally", lab:"INR < 1.5",
+            after:"Resume within 24 h with a prophylactic-dose LMWH until target INR is reached on two consecutive measurements (1C). If unable to take oral medication: therapeutic-dose LMWH from 48–72 h once haemostasis is secured (1C)", grade:"1C",
+            notes:"Bridging with LMWH/UFH is suggested against in low, moderate and high thrombotic risk; very specific high-risk patients (e.g. mechanical valve) case by case (2C)." },
+          { label:"Emergency moderate/high-bleeding-risk surgery", before:"Measure INR on admission; 4-factor PCC (initial 25 IU FIX/kg at INR 4) rather than plasma (1B)", lab:"INR", after:"Bleeding with VKA: 4F-PCC 25–50 IU/kg + vitamin K 5–10 mg IV (1B); plasma 15–20 ml/kg + vitamin K if PCC unavailable (1C)", grade:"1B" }
+        ] },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors", agents:"rivaroxaban · apixaban · edoxaban",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C" },
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake to surgery, provided CrCl > 30 ml/min. No bridging", lab:"No routine testing",
+            after:"Prophylactic-dose LMWH or DOAC post-op if thromboprophylaxis is indicated, then full therapeutic dose up to 72 h post-op once surgical haemostasis is achieved", grade:"1C / 2C",
+            renal:{ severe:"CrCl < 30: outside the 3-day recommendation — individualise (consider drug level / longer interval; see regional tab for assay targets)" },
+            notes:"Severe bleeding on a Xa inhibitor: PCC 25 IU/kg initially, suggested over andexanet alpha (2C)." }
+        ] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran", agents:"110–150 mg bd",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C" },
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake if CrCl > 50 ml/min. No bridging", lab:"No routine testing",
+            after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C",
+            renal:{ mod:"CrCl 30–50: 5 days from last intake", severe:"CrCl < 30: outside the recommendation (dabigatran generally contraindicated) — individualise" },
+            notes:"Severe bleeding on dabigatran: idarucizumab could be considered (2C)." }
+        ] },
+
+      { group:"Heparins", name:"UFH / LMWH / fondaparinux", agents:"",
+        doses:[
+          { label:"Interruption before surgery", before:"The ESAIC 2023 bleeding guideline gives no specific pre-operative interruption interval for heparins or fondaparinux. For a practical minimum, see the pharmacokinetic intervals on the Regional anaesthesia tab (LMWH low 12 h / high 24 h; UFH IV 6 h / SC 12 h; fondaparinux 36 h) and your local protocol",
+            lab:"Anti-Xa (LMWH, fondaparinux) · aPTT / anti-Xa / ACT (UFH)", after:"Per VTE-prophylaxis or therapeutic indication once haemostasis is secured", grade:"—",
+            notes:"Reversal of severe bleeding: IV UFH — protamine 1 mg per 100 IU given in the previous 2–3 h (1A). SC UFH unresponsive — continuous protamine guided by anti-Xa/aPTT (2C). LMWH — protamine 1 mg per 100 anti-Xa IU (2C). Fondaparinux — rFVIIa off-label could be considered (2C)." }
+        ] }
+    ]
+  },
+
+  /* ---------- TAB 3: DOAC dose definitions (ESAIC/ESRA 2022, Table 1) ---------- */
+  doseTable: {
+    note:"Low vs high dose is defined by regimen, not by indication alone; ‘low’ = twice the half-life interval, ‘high’ = 4–5 half-lives. Doses from the Summary of Product Characteristics as reproduced in Table 1 of the guideline.",
+    rows:[
+      ["VTE prophylaxis after hip/knee replacement", "low", "10 mg od", "2.5 mg bd", "—", "220 mg od (150 mg od if CrCl 30–50, age ≥ 75, verapamil/amiodarone/quinidine)"],
+      ["Stroke prevention in non-valvular AF", "high", "20 mg od (15 mg if CrCl 15–50)", "5 mg bd (2.5 mg bd if 2 of: age ≥ 80, weight ≤ 60 kg, creatinine ≥ 133 µmol/l; or CrCl 15–29)", "60 mg od (30 mg if CrCl 15–50, weight ≤ 60 kg, or ciclosporin/dronedarone/erythromycin/ketoconazole)", "150 mg bd (110 mg bd if age ≥ 80 or verapamil; 110/150 bd if CrCl 30–50 or age 75–80)"],
+      ["Acute VTE treatment", "high", "15 mg bd × 21 d then 20 mg od (15 mg od if CrCl 15–50)", "10 mg bd × 7 d then 5 mg bd", "60 mg od (30 mg as above)", "150 mg bd (110 mg bd as above)"],
+      ["Extended prevention of recurrent VTE", "low", "10 mg od or 20 mg od", "2.5 mg bd", "—", "—"],
+      ["Acute coronary syndrome", "low", "2.5 mg bd", "—", "—", "—"],
+      ["Symptomatic peripheral artery disease", "low", "2.5 mg bd", "—", "—", "—"]
+    ]
+  }
+};
+
+/* ============================================================
+   APP — no need to edit below unless changing behaviour
+   ============================================================ */
+const state = { tab:"regional", block:"high", proc:"high", renal:"normal", q:"" };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&(?!\w+;)/g,"&amp;").replace(/</g,"&lt;");
+
+function cell(label, val, cls){
+  if(!val) return `<div class="cell"><div class="lbl">${label}</div><p>—</p></div>`;
+  return `<div class="cell"><div class="lbl">${label}</div><div class="val ${cls||""}">${val}</div></div>`;
+}
+function renalBox(r){
+  if(!r) return "";
+  const parts = [];
+  if(r.mod) parts.push({k:"mod", t:r.mod});
+  if(r.severe) parts.push({k:"severe", t:r.severe});
+  return parts.map(p=>`<div class="renal ${state.renal===p.k?"active":""}">${p.t}</div>`).join("");
+}
+function doseRow(d, flag){
+  return `<div class="dose">
+    <h4>${esc(d.label)} ${d.grade?`<span class="grade">${esc(d.grade)}</span>`:""}</h4>
+    <div class="cols">
+      ${cell("Last dose → procedure", d.before, flag)}
+      ${cell("Lab target at procedure", d.lab)}
+      ${cell("Procedure → next dose", d.after)}
+    </div>
+    ${renalBox(d.renal)}
+    ${d.notes?`<p class="extra">${d.notes}</p>`:""}
+  </div>`;
+}
+function matches(drug){
+  if(!state.q) return true;
+  const h = (drug.name+" "+drug.agents+" "+drug.group).toLowerCase();
+  return h.includes(state.q);
+}
+function renderList(drugs, quickFn){
+  const groups = [...new Set(drugs.map(d=>d.group))];
+  let html = "";
+  let any = false;
+  for(const g of groups){
+    const items = drugs.filter(d=>d.group===g && matches(d));
+    if(!items.length) continue;
+    any = true;
+    html += `<div class="group-h">${esc(g)}</div>`;
+    for(const d of items){
+      html += `<details class="drug" ${state.q?"open":""}>
+        <summary><span class="name">${esc(d.name)}</span><span class="agents">${esc(d.agents)}</span><span class="quick">${quickFn(d)}</span></summary>
+        <div class="body">${d.doses.map(x=>doseRow(x, d.flag)).join("")}${d.notes?`<p class="extra">${d.notes}</p>`:""}</div>
+      </details>`;
+    }
+  }
+  return any ? html : `<p class="empty">No drug matches “${esc(state.q)}”.</p>`;
+}
+function quickRegional(d){
+  const first = d.doses[0];
+  let v = first.before;
+  if(state.renal!=="normal" && first.renal && first.renal[state.renal]) v = first.renal[state.renal];
+  return v.length>48 ? v.slice(0,46)+"…" : v;
+}
+function quickSurgical(d){
+  const want = state.proc==="low" ? /low-bleeding/i : /intermediate|withdrawal is decided|INR < 1\.5|clopidogrel|interruption before/i;
+  const row = d.doses.find(x=>want.test(x.label)) || d.doses[0];
+  let v = row.before;
+  if(state.renal!=="normal" && row.renal && row.renal[state.renal]) v = row.renal[state.renal];
+  return v.length>48 ? v.slice(0,46)+"…" : v;
+}
+
+function render(){
+  // tabs
+  for(const t of ["regional","surgical","ref"]){
+    $(`#tab-${t}`).setAttribute("aria-selected", state.tab===t);
+    $(`#panel-${t}`).classList.toggle("hidden", state.tab!==t);
+  }
+  $("#ctl-block").classList.toggle("hidden", state.tab!=="regional");
+  $("#ctl-proc").classList.toggle("hidden", state.tab!=="surgical");
+  $("#ctl-renal").classList.toggle("hidden", state.tab==="ref");
+  document.querySelector(".controls").classList.toggle("hidden", state.tab==="ref");
+  $("#banner").textContent = DATA.disclaimer;
+
+  // regional
+  if(state.tab==="regional"){
+    const R = DATA.regional;
+    if(state.block==="high"){
+      $("#panel-regional").innerHTML =
+        `<p class="note">Neuraxial and deep nerve blocks — Table 3 of ESAIC/ESRA 2022. Renal setting highlights the adjusted interval.</p>
+         <ul class="note">${R.generalHigh.map(x=>`<li>${x}</li>`).join("")}</ul>` + renderList(R.drugs, quickRegional);
+    } else {
+      $("#panel-regional").innerHTML =
+        `<p class="note">Superficial nerve blocks — Table 4 of ESAIC/ESRA 2022.</p>
+         <ul class="note">${R.generalLow.map(x=>`<li>${x}</li>`).join("")}</ul>
+         <div class="scroll"><table class="ref">
+           <tr><th>Drug</th><th>Last dose → block</th><th>Block → next dose</th><th>Lab target</th></tr>
+           <tr><td>DOACs (any dose), LMWH low, UFH low, fondaparinux low, aspirin low</td><td><strong style="color:var(--ok)">Zero</strong></td><td>Routinely prescribed next time point</td><td>No testing (consider a level if accumulation suspected)</td></tr>
+           <tr><td>VKA, LMWH high, UFH high, aspirin high, P2Y12 inhibitors, drug combinations</td><td><strong style="color:var(--ok)">Zero</strong> if within or below the patient's individual therapeutic range</td><td>Routinely prescribed next time point</td><td>Within or below the individual therapeutic range (not defined for DOACs)</td></tr>
+         </table></div>`;
+    }
+  }
+  // surgical
+  if(state.tab==="surgical"){
+    const S = DATA.surgical;
+    $("#panel-surgical").innerHTML =
+      `<p class="note">Pre-operative interruption and resumption around surgery — ESAIC 2023 severe peri-operative bleeding guideline, Recommendation 2. Open a drug for all procedure-risk rows; the summary shows the row for the selected procedure risk.</p>
+       <ul class="note">${S.general.map(x=>`<li>${x}</li>`).join("")}</ul>` + renderList(S.drugs, quickSurgical);
+  }
+  // reference
+  if(state.tab==="ref"){
+    const T = DATA.doseTable;
+    $("#panel-ref").innerHTML =
+      `<p class="note">${T.note}</p>
+       <div class="scroll"><table class="ref">
+         <tr><th>Indication</th><th>Category</th><th>Rivaroxaban</th><th>Apixaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>
+         ${T.rows.map(r=>`<tr><td>${r[0]}</td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`).join("")}
+       </table></div>
+       <h3 style="margin-top:28px;font-size:1rem">Other dose thresholds used in the guidelines</h3>
+       <ul class="note">
+         <li>LMWH: low ≤ 50 IU anti-Xa/kg/day (enoxaparin 40 mg, dalteparin 5000 IU, nadroparin 5700 IU, tinzaparin 4500 IU per day); high = anything above.</li>
+         <li>UFH: low ≤ 200 IU/kg/day SC or ≤ 100 IU/kg/day IV; high = anything above.</li>
+         <li>Fondaparinux: low 2.5 mg/day; high 5–10 mg/day.</li>
+         <li>Aspirin: low &lt; 200 mg/day; high ≥ 200 mg/day.</li>
+       </ul>`;
+  }
+  // footer
+  $("#footer").innerHTML =
+    `<p><strong>Sources</strong></p>` +
+    DATA.sources.map(s=>`<p>${esc(s.key)} — ${esc(s.text)} <a href="${s.url}" target="_blank" rel="noopener">link</a></p>`).join("") +
+    `<p>Data version ${esc(DATA.version)} · maintained by ${esc(DATA.editor)}</p>`;
+}
+
+function seg(id, key){
+  $(`#${id}`).addEventListener("click", e=>{
+    const b = e.target.closest("button"); if(!b) return;
+    [...e.currentTarget.querySelectorAll("button")].forEach(x=>x.setAttribute("aria-pressed", x===b));
+    state[key] = b.dataset.v; render();
+  });
+}
+seg("seg-block","block"); seg("seg-proc","proc"); seg("seg-renal","renal");
+document.querySelectorAll('[role="tab"]').forEach(t=>t.addEventListener("click",()=>{ state.tab = t.id.replace("tab-",""); render(); }));
+$("#q").addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); render(); });
+render();
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
+</script>
+</body>
+</html>
