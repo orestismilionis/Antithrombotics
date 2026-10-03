@@ -1,4 +1,4 @@
-# Antithrombotic timing — ESAIC/ESRA
+# Perioperative Medication Management
 
 Bedside reference for interruption and resumption intervals of anticoagulants and antiplatelet agents.
 
