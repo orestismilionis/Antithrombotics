@@ -4,6 +4,8 @@ Bedside reference for interruption and resumption intervals of anticoagulants an
 
 - **Regional anaesthesia** tab: ESAIC/ESRA 2022 joint guideline (Tables 3 and 4) — neuraxial/deep vs superficial blocks, with renal adjustments.
 - **Surgical interruption** tab: ESAIC 2023 severe peri-operative bleeding guideline (Recommendation 2) — low vs intermediate/high bleeding-risk procedures.
+- **Other meds** tab: beta-blockers, RAAS inhibitors, diuretics, statins, all antidiabetic classes (SGLT2i, GLP-1 RA, metformin, insulin…), steroids, thyroid, antiepileptics, Parkinson's, psychotropics, opioids, inhalers, immunosuppressants, herbal — ESC 2022, DGAI/DGCH/DGIM 2024, ESAIC 2018. Rows marked *verify* are not covered by these guidelines and reflect consensus practice.
+- **Planner** tab: enter drug(s), CrCl and procedure date/time → last-dose deadline and earliest resumption.
 - **Dose definitions** tab: low/high DOAC dose categorisation (Table 1, 2022).
 
 Everything is in one file, `index.html`. No build step, no dependencies, works offline.
@@ -38,4 +40,4 @@ The repository also contains `manifest.json`, `sw.js` and the icons, which make 
 - **iPhone (Safari):** open the GitHub Pages link → Share → *Add to Home Screen* → Add.
 - **Android (Chrome):** open the link → menu (⋮) → *Add to Home screen* / *Install app*.
 
-When a new version is online, the app shows an “Update” button; tap it to load the new version. You do not need to edit `sw.js` after changing files.
+Updates are automatic: every time the app is opened with internet it checks GitHub and, if a newer version exists, shows “Updating…” and reloads itself. You never need to edit `sw.js`.

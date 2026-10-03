@@ -143,6 +143,10 @@ footer p{margin:6px 0}
 #updBar span{flex:1}
 #updBar button{background:#fff;color:var(--blue);border:0;border-radius:10px;padding:8px 14px;font-weight:700;min-height:40px}
 @media (min-width:721px){#updBar{bottom:16px;left:auto;right:16px;max-width:360px}}
+.grade.warnb{background:var(--amber-soft);color:var(--amber)}
+@media (max-width:720px){.tabs button{font-size:.72rem;padding:6px 2px}.tabs button svg{width:20px;height:20px}}
+.intl{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--soft);border-left:4px solid var(--muted);font-size:.88rem}
+.intl .grade{background:#E5E7EB;color:#374151;margin-right:4px}
 </style>
 </head>
 <body>
@@ -182,15 +186,17 @@ footer p{margin:6px 0}
 <nav class="tabs" role="tablist">
   <button role="tab" id="tab-regional" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M7 7l5-4 5 4M7 17l5 4 5-4"/></svg>Regional</button>
   <button role="tab" id="tab-surgical" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 18 6l2 2L6 22H4zM14 10l-2-2 2-2 2 2"/></svg>Surgery</button>
+  <button role="tab" id="tab-other" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3h4l1 4h4l-2 4 2 4h-4l-1 4h-4l-1-4H5l2-4-2-4h4z"/></svg>Other meds</button>
   <button role="tab" id="tab-planner" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>Planner</button>
   <button role="tab" id="tab-ref" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Doses</button>
 </nav>
 
-<div id="updBar" role="status"><span>New version available</span><button type="button">Update</button></div>
+<div id="updBar" role="status"><span>Updating to the latest version…</span></div>
 <main class="wrap">
   <p class="banner" id="banner"></p>
   <section id="panel-regional" role="tabpanel"></section>
   <section id="panel-surgical" role="tabpanel" class="hidden"></section>
+  <section id="panel-other" role="tabpanel" class="hidden"></section>
   <section id="panel-planner" role="tabpanel" class="hidden"></section>
   <section id="panel-ref" role="tabpanel" class="hidden"></section>
   <footer id="footer"></footer>
@@ -203,7 +209,7 @@ footer p{margin:6px 0}
    time-based, see text). brands = trade names for search.
    ============================================================ */
 const DATA = {
-  version: "2026-10-03",
+  version: "2026-10-03f",
   editor: "Orestis Milionis, MD — 2nd Dept of Anaesthesiology, Attikon University Hospital",
   issuesUrl: "https://github.com/orestismilionis/Antithrombotics/issues",
   disclaimer: "Decision support only. Verify against the current guideline text and your institutional protocol and apply individual risk–benefit assessment. Intervals are transcribed from the published tables; they do not replace clinical judgement.",
@@ -211,7 +217,25 @@ const DATA = {
     { key:"ESAIC/ESRA 2022", text:"Kietaibl S, Ferrandis R, Godier A, et al. Regional anaesthesia in patients on antithrombotic drugs: Joint ESAIC/ESRA guidelines. Eur J Anaesthesiol 2022;39:100–132. DOI 10.1097/EJA.0000000000001600 (Tables 1–4; R1–R40).",
       url:"https://esaic.org/wp-content/uploads/2023/12/regional_anaesthesia_in_patients_on_antithrom.pdf" },
     { key:"ESAIC 2023", text:"Kietaibl S, Ahmed A, Afshari A, et al. Management of severe peri-operative bleeding: Guidelines from the ESAIC, second update 2022. Eur J Anaesthesiol 2023;40:226–304. DOI 10.1097/EJA.0000000000001803 (Table 2, R2).",
-      url:"https://journals.lww.com/ejanaesthesiology/fulltext/2023/04000/management_of_severe_peri_operative_bleeding_.2.aspx" }
+      url:"https://journals.lww.com/ejanaesthesiology/fulltext/2023/04000/management_of_severe_peri_operative_bleeding_.2.aspx" },
+    { key:"ESC 2022", text:"Halvorsen S, Mehilli J, Cassese S, et al. 2022 ESC Guidelines on cardiovascular assessment and management of patients undergoing non-cardiac surgery (endorsed by ESAIC). Eur Heart J 2022;43:3826–3924. DOI 10.1093/eurheartj/ehac270 (Section 5.2, Rec. Tables 12, 27, 32; Table 5).",
+      url:"https://academic.oup.com/eurheartj/article/43/39/3826/6675076" },
+    { key:"DGAI/DGCH/DGIM 2024", text:"Zöllner C, et al. Präoperative Evaluation erwachsener Patientinnen und Patienten vor elektiven, nicht herz-thoraxchirurgischen Eingriffen — joint recommendation of the German societies of anaesthesiology, surgery and internal medicine. Anaesthesiologie 2024;73:294–323. DOI 10.1007/s00101-024-01408-2 (Part C, E43–E54, Table 24).",
+      url:"https://pmc.ncbi.nlm.nih.gov/articles/PMC11076399/" },
+    { key:"ESAIC 2018", text:"De Hert S, Staender S, Fritsch G, et al. Pre-operative evaluation of adults undergoing elective noncardiac surgery: updated guideline from the European Society of Anaesthesiology. Eur J Anaesthesiol 2018;35:407–465. DOI 10.1097/EJA.0000000000000817 (Section 2.2 concurrent medication: herbal, psychotropic drugs; beta-blockers, statins).",
+      url:"https://journals.lww.com/ejanaesthesiology/fulltext/2018/06000/pre_operative_evaluation_of_adults_undergoing.3.aspx" },
+    { key:"AoA/RCP/SfE 2020", text:"Woodcock T, Barker P, Daniel S, et al. Guidelines for the management of glucocorticoids during the peri-operative period for patients with adrenal insufficiency: Association of Anaesthetists, Royal College of Physicians and Society for Endocrinology UK. Anaesthesia 2020;75:654–663. DOI 10.1111/anae.14963 (Tables 1–2).",
+      url:"https://associationofanaesthetists-publications.onlinelibrary.wiley.com/doi/10.1111/anae.14963" },
+    { key:"ACR/AAHKS 2022", text:"Goodman SM, Springer BD, Chen AF, et al. 2022 ACR/AAHKS Guideline for the Perioperative Management of Antirheumatic Medication in Patients with Rheumatic Diseases Undergoing Elective Total Hip or Total Knee Arthroplasty. Arthritis Rheumatol 2022;74:1464–1473. DOI 10.1002/art.42140.",
+      url:"https://acrjournals.onlinelibrary.wiley.com/doi/10.1002/art.42140" },
+    { key:"UKCPA", text:"UK Clinical Pharmacy Association. Handbook of Perioperative Medicines (online; drug records for levothyroxine, liothyronine, carbamazepine, eslicarbazepine, valproate, co-careldopa, rotigotine, Parkinson's disease overview).",
+      url:"https://periop-handbook.ukclinicalpharmacy.org/" },
+    { key:"ASRA 2025", text:"Kopp SL, Vandermeulen E, McBane RD, Perlas A, Leffert L, Horlocker T. Regional anesthesia in the patient receiving antithrombotic or thrombolytic therapy: ASRA Pain Medicine Evidence-Based Guidelines (fifth edition). Reg Anesth Pain Med 2025. DOI 10.1136/rapm-2024-105766. Comparison notes in this app were taken from the ASRA guideline summary (Guideline Central), ESRA's review and ASRA's own commentary — the full text was not accessible for this build.",
+      url:"https://rapm.bmj.com/lookup/doi/10.1136/rapm-2024-105766" },
+    { key:"CHEST 2022", text:"Douketis JD, Spyropoulos AC, Murad MH, et al. Perioperative Management of Antithrombotic Therapy: An American College of Chest Physicians Clinical Practice Guideline. Chest 2022;162:e207–e243. DOI 10.1016/j.chest.2022.07.025 (DOAC timings follow the PAUSE protocol).",
+      url:"https://journal.chestnet.org/article/S0012-3692(22)01359-3/fulltext" },
+    { key:"FSRH / NICE", text:"FSRH Clinical Guideline: Combined Hormonal Contraception (2019, amended 2023); NICE NG89 Venous thromboembolism in over 16s (2018).",
+      url:"https://www.fsrh.org/standards-and-guidance/documents/combined-hormonal-contraception/" }
   ],
 
   /* ---- Table 2 (2022): block categorisation. verify:true = column assignment unclear in the PDF text extraction — check against the printed table. ---- */
@@ -244,20 +268,20 @@ const DATA = {
       { group:"Vitamin K antagonists", name:"VKA", agents:"acenocoumarol · warfarin · phenprocoumon · fluindione", brands:"Sintrom Panwarfin Coumadin Marcoumar Marevan",
         doses:[
           { label:"Acenocoumarol", before:"≈ 3 days — until INR normal", lab:"INR in the local normal range (e.g. 1.1); INR < 1.5 acceptable in selected patients (2C)", after:"Per VTE-prophylaxis / therapeutic guidance; with a catheter in situ only after removal (low-dose LMWH may bridge)", grade:"1C / 2C", hours:{before:72, after:null, labRequired:true} },
-          { label:"Warfarin · fluindione", before:"≈ 5 days — until INR normal", lab:"INR in the local normal range; < 1.5 acceptable in selected patients (2C)", after:"As above", grade:"1C / 2C", hours:{before:120, after:null, labRequired:true} },
+          { label:"Warfarin · fluindione", asra:"ASRA 2025: stop 5 days and confirm INR normalised (local normal range) before needle placement (IB); INR > 3 with a catheter in situ → hold/reduce; neurological checks ≥ 24 h after catheter removal", before:"≈ 5 days — until INR normal", lab:"INR in the local normal range; < 1.5 acceptable in selected patients (2C)", after:"As above", grade:"1C / 2C", hours:{before:120, after:null, labRequired:true} },
           { label:"Phenprocoumon", before:"≈ 7 days — until INR normal", lab:"INR in the local normal range; < 1.5 acceptable in selected patients (2C)", after:"As above", grade:"1C / 2C", hours:{before:168, after:null, labRequired:true} }
         ],
         notes:"Emergency reversal for neuraxial/deep procedures: 4-factor PCC (INR-adjusted) + vitamin K 10 mg (R31, 2C)." },
 
       { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — low dose", agents:"rivaroxaban 10 mg od · apixaban 2.5 mg bd · edoxaban (see Doses)", brands:"Xarelto Eliquis Lixiana",
         doses:[
-          { label:"Rivaroxaban 10 mg · edoxaban", before:"24 h", lab:"No testing", after:"≈ 6 h post-op (VTE-prophylaxis guidance); longer after a bloody tap. Catheter in situ: only after removal", renal:{severe:"CrCl < 30: ≥ 30 h"}, grade:"1C", hours:{before:24, severe:30, after:6} },
+          { label:"Rivaroxaban 10 mg · edoxaban", before:"24 h", lab:"No testing", after:"≈ 6 h post-op (VTE-prophylaxis guidance); longer after a bloody tap. Catheter in situ: only after removal", renal:{severe:"CrCl < 30: ≥ 30 h"}, grade:"1C", hours:{before:24, severe:30, after:6}, asra:"ASRA 2025: same — low-dose rivaroxaban held ≥ 24 h (30 h if CrCl < 30), or level < 30 ng/ml / anti-Xa ≤ 0.1 IU/ml, before catheter removal (IIC)" },
           { label:"Apixaban 2.5 mg bd", before:"36 h", lab:"No testing", after:"≈ 6 h post-op; catheter in situ: only after removal", grade:"1C", hours:{before:36, after:6} }
         ] },
 
       { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — high dose", agents:"rivaroxaban 15–20 mg · apixaban 5 mg bd (10 mg bd loading) · edoxaban 30–60 mg", brands:"Xarelto Eliquis Lixiana",
         doses:[{ label:"High dose", before:"72 h, or until target laboratory value", lab:"Drug level < 30 ng/ml (alternative anti-Xa ≤ 0.1 IU/ml) — may shorten or lengthen the interval (R26, 2C)", after:"≈ 24 h post-op (therapeutic guidance). Not with a neuraxial catheter in situ",
-          renal:{severe:"CrCl < 30: proceed only when the calibrated assay is within the local normal range (2C)"}, grade:"1C", hours:{before:72, severeLab:true, after:24},
+          renal:{severe:"CrCl < 30: proceed only when the calibrated assay is within the local normal range (2C)"}, grade:"1C", hours:{before:72, severeLab:true, after:24}, asra:"ASRA 2025: high-dose apixaban / rivaroxaban / edoxaban ≥ 72 h before neuraxial or deep plexus/peripheral block (IIC); residual level < 30 ng/ml or anti-Xa ≤ 0.1 IU/ml acceptable; reversal agents not recommended solely to permit a block",
           notes:"Andexanet alpha and PCC/aPCC do not shorten the intervals (R32)." }] },
 
       { group:"Direct oral anticoagulants", name:"Dabigatran — low dose", agents:"220 mg od (150 mg od if CrCl 30–50, age ≥ 75, or verapamil/amiodarone/quinidine)", brands:"Pradaxa",
@@ -265,7 +289,7 @@ const DATA = {
 
       { group:"Direct oral anticoagulants", name:"Dabigatran — high dose", agents:"150 mg bd · 110 mg bd", brands:"Pradaxa",
         doses:[{ label:"High dose", before:"72 h, or until target laboratory value", lab:"Dabigatran < 30 ng/ml, or thrombin time in the local normal range (R27, 2C)", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ",
-          renal:{mod:"CrCl 30–50: proceed only when thrombin time / dabigatran level is within the local normal range (2C)", severe:"CrCl < 30: assay within normal range required; drug accumulates markedly (generally contraindicated)"}, grade:"1C", hours:{before:72, modLab:true, severeLab:true, after:24},
+          renal:{mod:"CrCl 30–50: proceed only when thrombin time / dabigatran level is within the local normal range (2C)", severe:"CrCl < 30: assay within normal range required; drug accumulates markedly (generally contraindicated)"}, grade:"1C", hours:{before:72, modLab:true, severeLab:true, after:24}, asra:"ASRA 2025: high-dose dabigatran ≥ 72 h if CrCl ≥ 50; 120 h if CrCl 30–49; CrCl < 30 — no neuraxial/deep block unless level < 30 ng/ml (IIC). Differs from ESAIC/ESRA, which uses a lab target rather than 120 h",
           notes:"Idarucizumab fully reverses dabigatran for emergency neuraxial/deep procedures (R32, 2C); PCC/aPCC do not change the interval." }] },
 
       { group:"Heparins", name:"LMWH — low dose", agents:"≤ 50 IU anti-Xa/kg/day · enoxaparin 40 mg · dalteparin 5000 IU · tinzaparin 4500 IU · nadroparin 5700 IU per day", brands:"Clexane Fragmin Innohep Fraxiparine Lovenox",
@@ -273,7 +297,7 @@ const DATA = {
           notes:"Obstetrics: 10–12 h as in the non-pregnant population (R8)." }] },
 
       { group:"Heparins", name:"LMWH — high dose", agents:"> 50 IU anti-Xa/kg/day (e.g. enoxaparin 1 mg/kg bd or 1.5 mg/kg od)", brands:"Clexane Fragmin Innohep Fraxiparine Lovenox",
-        doses:[{ label:"High (therapeutic) dose", before:"24 h, or until target laboratory value", lab:"Anti-Xa ≤ 0.1 IU/ml (R25, 2C)", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ — bridge with low dose until removal", renal:{severe:"CrCl < 30: halve the dose or double the interval to 48 h"}, grade:"1C", hours:{before:24, severe:48, after:24} }] },
+        doses:[{ label:"High (therapeutic) dose", before:"24 h, or until target laboratory value", lab:"Anti-Xa ≤ 0.1 IU/ml (R25, 2C)", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ — bridge with low dose until removal", renal:{severe:"CrCl < 30: halve the dose or double the interval to 48 h"}, grade:"1C", hours:{before:24, severe:48, after:24}, asra:"ASRA 2025: high-dose LMWH resumed 24 h after non-high-bleeding-risk and 48–72 h after high-bleeding-risk surgery" }] },
 
       { group:"Heparins", name:"UFH — low dose", agents:"SC ≤ 200 IU/kg/day (e.g. 5000 IU bd–tds) · IV ≤ 100 IU/kg/day", brands:"Heparin",
         doses:[{ label:"Low dose", before:"4 h", lab:"No testing", after:"Per VTE-prophylaxis guidance (≈ 6 h); 1 h after the block for IV UFH in vascular surgery after risk–benefit analysis (2C). May continue with a catheter in situ", grade:"1C", hours:{before:4, after:6} }] },
@@ -291,7 +315,7 @@ const DATA = {
         doses:[{ label:"High dose", before:"Neuraxial procedures not recommended (1C). If unavoidable: ≈ 4 days, until target laboratory value", lab:"Calibrated anti-Xa ≤ 0.1 IU/ml", after:"Per therapeutic-anticoagulation guidance", grade:"1C / 2C", hours:{before:96, after:24, labRequired:true, notRecommended:true} }] },
 
       { group:"Antiplatelet agents", name:"Aspirin — low dose", agents:"< 200 mg/day", brands:"Salospir Aspirin-Protect Aspirin Cardio", flag:"ok",
-        doses:[{ label:"Low dose", before:"0 — not a contraindication after risk–benefit analysis", lab:"No testing", after:"Routinely prescribed next time point", grade:"1C", hours:{before:0, after:0},
+        doses:[{ label:"Low dose", before:"0 — not a contraindication after risk–benefit analysis", lab:"No testing", after:"Routinely prescribed next time point", grade:"1C", hours:{before:0, after:0}, asra:"ASRA 2025: aspirin and NSAIDs alone do not add risk for neuraxial or deep plexus/peripheral blocks",
           notes:"Single-shot spinal preferred over epidural (R16). Avoid combining with NSAIDs peri-operatively." }] },
 
       { group:"Antiplatelet agents", name:"Aspirin — high dose", agents:"≥ 200 mg/day", brands:"Aspirin",
@@ -299,9 +323,9 @@ const DATA = {
 
       { group:"Antiplatelet agents", name:"P2Y12 inhibitors", agents:"clopidogrel · prasugrel · ticagrelor", brands:"Plavix Iscover Efient Brilique",
         doses:[
-          { label:"Clopidogrel", before:"5–7 days, or until platelet function test normal", lab:"Consider platelet function test (2C)", after:"75 mg: without delay · 300 mg loading: ≥ 2 days. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, beforeMax:168, after:0, afterAlt:"≥ 48 h if 300 mg loading"} },
-          { label:"Prasugrel", before:"7 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:168, after:24} },
-          { label:"Ticagrelor", before:"5 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, after:24} }
+          { label:"Clopidogrel", before:"5–7 days, or until platelet function test normal", lab:"Consider platelet function test (2C)", after:"75 mg: without delay · 300 mg loading: ≥ 2 days. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, beforeMax:168, after:0, afterAlt:"≥ 48 h if 300 mg loading"}, asra:"ASRA 2025: 5–7 days; a catheter may be kept 1–2 days on clopidogrel without a loading dose (IIC); resume immediately after catheter removal (6 h if a loading dose is given). Differs from ESAIC/ESRA (catheter removal before any P2Y12 dose)" },
+          { label:"Prasugrel", before:"7 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:168, after:24}, asra:"ASRA 2025: 7–10 days; catheters never maintained on prasugrel (rapid onset)" },
+          { label:"Ticagrelor", before:"5 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, after:24}, asra:"ASRA 2025: 5 days (IIC); catheters not maintained; resume immediately after needle/catheter removal if no loading dose" }
         ],
         notes:"Deep blocks are contraindicated on P2Y12 inhibitors (R18). Loading doses (ACS): do not perform neuraxial/deep blocks (R34). Catheter in situ with urgent DAPT: interdisciplinary management; remove immediately before a clopidogrel loading dose takes effect, or bridge with tirofiban (stop 8 h) / cangrelor (stop 3 h) (R20)." }
     ]
@@ -335,7 +359,7 @@ const DATA = {
       { group:"Vitamin K antagonists", name:"VKA", agents:"acenocoumarol · warfarin · phenprocoumon", brands:"Sintrom Panwarfin Coumadin Marcoumar",
         doses:[
           { label:"Low-bleeding-risk procedure", before:"Do not interrupt (skin, dental, endoscopy without polypectomy, cataract)", lab:"", after:"—", grade:"1C", hours:{before:0, after:0, continue:true} },
-          { label:"Procedure requiring INR < 1.5", before:"3–5 days from last intake (all thrombotic-risk categories). If INR > 1.5 the day before surgery: vitamin K 5 mg orally", lab:"INR < 1.5", after:"Resume within 24 h with prophylactic-dose LMWH until target INR on two consecutive measurements (1C). If unable to take oral medication: therapeutic-dose LMWH from 48–72 h once haemostasis is secured (1C)", grade:"1C", hours:{before:72, beforeMax:120, after:24, labRequired:true},
+          { label:"Procedure requiring INR < 1.5", before:"3–5 days from last intake (all thrombotic-risk categories). If INR > 1.5 the day before surgery: vitamin K 5 mg orally", lab:"INR < 1.5", after:"Resume within 24 h with prophylactic-dose LMWH until target INR on two consecutive measurements (1C). If unable to take oral medication: therapeutic-dose LMWH from 48–72 h once haemostasis is secured (1C)", grade:"1C", hours:{before:72, beforeMax:120, after:24, labRequired:true}, asra:"CHEST 2022: stop warfarin 5 days before, resume within 24 h; no heparin bridging except selected very-high-risk (mechanical mitral valve, recent stroke/VTE)",
             notes:"Bridging with LMWH/UFH is suggested against in low, moderate and high thrombotic risk; very specific high-risk patients (e.g. mechanical valve) case by case (2C)." },
           { label:"Emergency moderate/high-bleeding-risk surgery", before:"Measure INR on admission; 4-factor PCC (initial 25 IU FIX/kg at INR 4) rather than plasma (1B)", lab:"INR", after:"Bleeding on VKA: 4F-PCC 25–50 IU/kg + vitamin K 5–10 mg IV (1B); plasma 15–20 ml/kg + vitamin K if PCC unavailable (1C)", grade:"1B" }
         ] },
@@ -343,7 +367,7 @@ const DATA = {
       { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors", agents:"rivaroxaban · apixaban · edoxaban", brands:"Xarelto Eliquis Lixiana",
         doses:[
           { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C", hours:{before:24, after:6, dayBefore:true} },
-          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake to surgery, provided CrCl > 30 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full therapeutic dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, after:72, severeLab:true},
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake to surgery, provided CrCl > 30 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full therapeutic dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, after:72, severeLab:true}, asra:"CHEST 2022 / PAUSE: Xa inhibitors stopped 1 day before low–moderate and 2 days before high-bleeding-risk surgery (i.e. 2 or 3 days of omission), resumed 1 day (low) or 2–3 days (high) after; no bridging, no routine levels",
             renal:{severe:"CrCl < 30: outside the 3-day recommendation — individualise (drug level / longer interval; see Regional tab for assay targets)"},
             notes:"Severe bleeding on a Xa inhibitor: PCC 25 IU/kg initially, suggested over andexanet alpha (2C)." }
         ] },
@@ -351,7 +375,7 @@ const DATA = {
       { group:"Direct oral anticoagulants", name:"Dabigatran", agents:"110–150 mg bd", brands:"Pradaxa",
         doses:[
           { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C", hours:{before:24, after:6, dayBefore:true} },
-          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake if CrCl > 50 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, mod:120, after:72, severeLab:true},
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake if CrCl > 50 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, mod:120, after:72, severeLab:true}, asra:"CHEST 2022 / PAUSE: dabigatran stopped 1 day (low–moderate) or 2 days (high bleeding risk) before if CrCl ≥ 50; 2 or 4 days if CrCl < 50; no bridging",
             renal:{mod:"CrCl 30–50: 5 days from last intake", severe:"CrCl < 30: outside the recommendation (dabigatran generally contraindicated) — individualise"},
             notes:"Severe bleeding on dabigatran: idarucizumab could be considered (2C)." }
         ] },
@@ -359,6 +383,145 @@ const DATA = {
       { group:"Heparins", name:"UFH / LMWH / fondaparinux", agents:"", brands:"Clexane Fragmin Innohep Fraxiparine Arixtra Heparin",
         doses:[{ label:"Interruption before surgery", before:"The ESAIC 2023 bleeding guideline gives no specific pre-operative interruption interval for heparins or fondaparinux. For a practical minimum see the pharmacokinetic intervals on the Regional tab (LMWH low 12 h / high 24 h; UFH IV 6 h / SC 12 h; fondaparinux 36 h) and your local protocol", lab:"Anti-Xa (LMWH, fondaparinux) · aPTT / anti-Xa / ACT (UFH)", after:"Per VTE-prophylaxis or therapeutic indication once haemostasis is secured", grade:"—",
           notes:"Reversal of severe bleeding: IV UFH — protamine 1 mg per 100 IU given in the previous 2–3 h (1A). LMWH — protamine 1 mg per 100 anti-Xa IU (2C). Fondaparinux — rFVIIa off-label could be considered (2C)." }] }
+    ]
+  },
+
+  /* ---- Tab: other chronic medication (ESC 2022 R-Table 12/27/32; DGAI/DGCH/DGIM 2024 part C; ESAIC 2018) ----
+     verify:true = recommendation reproduced from memory of the cited source, not re-read for this build — check before relying on it. */
+  other: {
+    general: [
+      "Give every patient individualised verbal and written instructions on which drugs to take or hold (DGAI/DGCH/DGIM 2024 E9, grade A).",
+      "Default is to continue chronic medication, including on the morning of surgery with a sip of water; the exceptions are listed per drug below.",
+      "Procedure-risk categories follow ESC 2022 Table 5: low (<1 % 30-day CV event: breast, dental, thyroid, eye, minor gynae/ortho/uro, superficial), intermediate (1–5 %: intraperitoneal, carotid, EVAR, head & neck, major ortho/spine, renal transplant, major uro/gynae), high (>5 %: aortic/major vascular, pancreatoduodenal, liver/biliary, oesophagectomy, pneumonectomy, cystectomy, transplant, perforated bowel).",
+      "Antithrombotic agents are on the Regional and Surgery tabs."
+    ],
+    drugs: [
+      { group:"Cardiovascular", name:"Beta-blockers", agents:"bisoprolol · metoprolol · atenolol · carvedilol · nebivolol", brands:"Concor Lopresor Tenormin Dilatrend Lobivon",
+        doses:[{ label:"Chronic therapy", before:"Continue, including the morning of surgery", lab:"", after:"Continue without interruption post-op (withdrawal > 2 days doubles AF risk)", grade:"ESC I B · ESAIC 2018 1B · DGAI E46 A",
+          notes:"Do not start routinely before surgery (ESC III; DGAI E45 A). Initiation may be considered only in high-risk patients before high-risk surgery (≥ 2 RCRI factors or ASA ≥ 3) or with documented inducible ischaemia, with enough time to titrate — atenolol or bisoprolol first choice (ESC IIb; DGAI E43/E44 grade 0). Treat post-op tachycardia by its cause (hypovolaemia, pain, bleeding, infection) before up-titrating." }] },
+
+      { group:"Cardiovascular", name:"Statins", agents:"atorvastatin · rosuvastatin · simvastatin · pravastatin", brands:"Lipitor Crestor Zocor",
+        doses:[{ label:"Chronic therapy", before:"Continue peri-operatively", lab:"", after:"Continue; resume as soon as oral intake allows", grade:"ESC I B · DGAI E53 A",
+          notes:"Routine peri-operative initiation is not recommended (ESC); if a statin is indicated anyway, consider starting it pre-operatively, ideally before vascular surgery (ESC IIb; DGAI E54 B)." }] },
+
+      { group:"Cardiovascular", name:"ACE inhibitors / ARBs", agents:"ramipril · perindopril · enalapril · lisinopril · losartan · valsartan · candesartan · olmesartan", brands:"Triatec Coversyl Renitec Zestril Cozaar Diovan Atacand Olmetec",
+        doses:[
+          { label:"For hypertension (no heart failure)", before:"Withhold on the morning of surgery (24 h for once-daily agents) to reduce intra-operative hypotension", lab:"", after:"Restart as soon as possible post-op to avoid unintended long-term omission", grade:"ESC IIa B · DGAI E48 B" },
+          { label:"For heart failure / LV dysfunction", before:"Continuation may be considered under close haemodynamic monitoring", lab:"", after:"Continue", grade:"ESC IIb B · DGAI (text)",
+            notes:"For low-risk, short procedures with minimal fluid shifts continuation can be reasonable regardless of indication — case-by-case decision (DGAI 2024)." }
+        ] },
+
+      { group:"Cardiovascular", name:"ARNI (sacubitril/valsartan) · ivabradine", agents:"Entresto · Procoralan", brands:"Entresto Procoralan",
+        doses:[{ label:"Chronic therapy", before:"ARNI: no peri-operative data; hypotension is more frequent than with ACEi — manage as ACEi/ARB for HF (continue with monitoring, or hold the morning dose if hypotension is a concern). Ivabradine: continuation appears reasonable", lab:"", after:"Resume post-op", grade:"ESC text · DGAI text (no graded rec.)" }] },
+
+      { group:"Cardiovascular", name:"Calcium-channel blockers", agents:"amlodipine · nifedipine · lercanidipine · diltiazem · verapamil", brands:"Norvasc Adalat Lercadip Tildiem Isoptin",
+        doses:[{ label:"Chronic therapy", before:"Continue; consider withholding the dose on the day of surgery to avoid post-op hypotension (ESC text). Dihydropyridines in vasospastic angina and rate-control agents: continue", lab:"", after:"Resume", grade:"ESC text · DGAI text (continue)" }] },
+
+      { group:"Cardiovascular", name:"Diuretics", agents:"furosemide · torasemide · hydrochlorothiazide · indapamide · spironolactone · eplerenone", brands:"Lasix Diuver Fludex Aldactone Inspra",
+        doses:[{ label:"Chronic therapy", before:"Temporary discontinuation on the day of surgery may be considered (hypovolaemia, hypokalaemia); in heart failure adjust the dose rather than stop", lab:"Potassium if on loop/thiazide ± MRA", after:"Resume immediately post-op, especially in heart failure (IV if needed)", grade:"ESC IIb C · DGAI E47 grade 0" }] },
+
+      { group:"Cardiovascular", name:"Digoxin · antiarrhythmics", agents:"digoxin · amiodarone · flecainide · propafenone · sotalol", brands:"Lanoxin Angoron Tambocor Rytmonorm Sotalex",
+        doses:[{ label:"Chronic therapy", before:"Continue (withdrawal may precipitate tachyarrhythmia in AF; digoxin's long half-life makes short interruption pointless)", lab:"Potassium, magnesium; digoxin level if toxicity suspected", after:"Continue", grade:"DGAI text (continue)",
+          notes:"Routine prophylactic amiodarone to prevent post-op AF is not recommended by ESC despite reducing AF incidence." }] },
+
+      { group:"Cardiovascular", name:"Alpha-2 agonists · nitrates", agents:"clonidine · moxonidine · isosorbide mononitrate", brands:"Catapresan Physiotens Monosordil",
+        doses:[{ label:"Chronic therapy", before:"Continue (rebound hypertension on withdrawal; nitrate withdrawal can precipitate ischaemia)", lab:"", after:"Continue", grade:"DGAI text (continue)",
+          notes:"Do not start alpha-2 agonists for cardiac risk reduction (ESC III B)." }] },
+
+      { group:"Antidiabetic", name:"SGLT2 inhibitors", agents:"empagliflozin · dapagliflozin · canagliflozin · ertugliflozin", brands:"Jardiance Forxiga Invokana Steglatro",
+        doses:[
+          { label:"Intermediate / high-risk surgery", before:"Stop ≥ 3 days (72 h) before", lab:"Blood glucose; ketones if unwell", after:"Restart when eating and drinking normally and no ketosis", grade:"ESC IIa C · DGAI E49 B", hours:{before:72, after:null} },
+          { label:"Low-risk surgery", before:"Stop ≥ 24–48 h before (DGAI); ESC gives no specific instruction for low-risk", lab:"", after:"Restart when eating normally", grade:"DGAI E49 B", hours:{before:24, beforeMax:48, after:null} }
+        ],
+        notes:"Risk is euglycaemic diabetic ketoacidosis — check ketones in any unwell post-op patient even with normal glucose. Monitor glucose closely during the pause." },
+
+      { group:"Antidiabetic", name:"GLP-1 receptor agonists", agents:"semaglutide · liraglutide · dulaglutide · tirzepatide (GLP-1/GIP)", brands:"Ozempic Wegovy Rybelsus Victoza Saxenda Trulicity Mounjaro",
+        doses:[
+          { label:"Once-weekly injection", before:"Last dose ≥ 1 week before surgery", lab:"", after:"Resume post-op", grade:"DGAI E50 B", hours:{before:168, after:null} },
+          { label:"Daily (injection or oral)", before:"Hold on the day of surgery", lab:"", after:"Resume post-op", grade:"DGAI E50 B", hours:{before:24, after:null} }
+        ],
+        notes:"Applies whether prescribed for diabetes or weight loss. Delayed gastric emptying: if the drug was not paused, or the patient has nausea, vomiting or abdominal pain, treat as non-fasted (full-stomach precautions or postpone) (DGAI 2024, following ASA consensus). No ESAIC/ESC graded recommendation yet." },
+
+      { group:"Antidiabetic", name:"Metformin", agents:"metformin", brands:"Glucophage",
+        doses:[
+          { label:"Low / intermediate risk of tissue hypoxia, renal or hepatic impairment", before:"Continue until the evening before surgery", lab:"Creatinine / eGFR", after:"Resume when eating and renal function stable", grade:"DGAI E51 B", hours:{before:12, after:null} },
+          { label:"High risk of tissue hypoxia / renal or hepatic impairment (major abdominal, major orthopaedic, vascular)", before:"Stop 48 h before", lab:"Creatinine / eGFR; lactate if unwell", after:"Resume 48 h post-op if renal function stable", grade:"DGAI E52 A", hours:{before:48, after:48} }
+        ],
+        notes:"IV contrast: pause 24–48 h. Lactic acidosis risk is very low in the immediate peri-operative period; UK NHS/SAMBA allow continuation with normal renal function." },
+
+      { group:"Antidiabetic", name:"Sulfonylureas · glinides", agents:"gliclazide · glimepiride · glibenclamide · repaglinide", brands:"Diamicron Solosa Daonil Novonorm",
+        doses:[{ label:"Chronic therapy", before:"Hold on the day of surgery (earlier if prolonged fasting or acute organ dysfunction)", lab:"Glucose — highest hypoglycaemia risk of the oral agents", after:"Resume with first meal", grade:"DGAI E50 B", hours:{before:24, after:null} }] },
+
+      { group:"Antidiabetic", name:"DPP-4 inhibitors · glitazones", agents:"sitagliptin · vildagliptin · linagliptin · pioglitazone", brands:"Januvia Galvus Trajenta Actos",
+        doses:[{ label:"Monotherapy", before:"No pause needed", lab:"", after:"Continue", grade:"DGAI Table 24 (no pause)", notes:"Glitazones: watch for fluid retention / cardiac decompensation." }] },
+
+      { group:"Antidiabetic", name:"Alpha-glucosidase inhibitors", agents:"acarbose", brands:"Glucobay",
+        doses:[{ label:"Chronic therapy", before:"Hold on the day of surgery", lab:"", after:"Resume with meals", grade:"DGAI E50 B" }] },
+
+      { group:"Antidiabetic", name:"Insulin", agents:"basal (glargine, degludec, detemir, NPH) · bolus (aspart, lispro, glulisine) · premixed · pump", brands:"Lantus Toujeo Tresiba Levemir Novorapid Humalog Apidra",
+        doses:[
+          { label:"Basal-bolus regimen, short procedure", before:"Morning of surgery: give basal insulin only, omit the prandial bolus. Consider reducing basal by up to 50 % the evening before / morning of surgery if recent dose change, poor control, surgery > 2 h with expected blood loss or fluid shifts, or acute renal/hepatic impairment", lab:"Capillary glucose before, during and after; HbA1c within 3 months (ESC I)", after:"Resume usual regimen with first meal; hourly–2-hourly glucose checks until then", grade:"DGAI text (no graded rec.)" },
+          { label:"Type 1 diabetes / long or major surgery", before:"Never omit basal insulin; variable-rate IV insulin infusion with glucose per local protocol", lab:"Glucose and ketones", after:"Overlap subcutaneous basal insulin before stopping the infusion", grade:"Local protocol" }
+        ],
+        notes:"ESC 2022: measure HbA1c pre-operatively in patients with diabetes or risk factors if not done within 3 months (I B); SGLT2i interruption as above (IIa C)." },
+
+      { group:"Endocrine", name:"Corticosteroids", agents:"prednisolone · methylprednisolone · hydrocortisone · dexamethasone", brands:"Prezolon Medrol Solu-Cortef",
+        doses:[
+          { label:"Primary / secondary adrenal insufficiency (replacement doses)", before:"Continue usual dose; first on the list, minimise fasting", lab:"Glucose, sodium; lying/standing BP post-op", after:"Hydrocortisone 100 mg IV at induction, then infusion 200 mg/24 h (or 50 mg IM 6-hourly) while nil by mouth; then double the usual oral dose for 24 h (minor/rapid recovery) to 48 h, up to a week after major surgery, then taper to maintenance. Dexamethasone is NOT adequate cover in primary adrenal insufficiency (no mineralocorticoid activity)", grade:"Association of Anaesthetists / RCP / SfE 2020 (Table 1)",
+            notes:"Bowel prep: IV fluids and injected hydrocortisone during preparation, especially if fludrocortisone- or vasopressin-dependent. Labour: 100 mg IV at onset then 200 mg/24 h. If in doubt, give — short-term glucocorticoid has no long-term harm." },
+          { label:"Therapeutic glucocorticoids (≥ 5 mg prednisolone-equivalent/day for ≥ 4 weeks, any route incl. inhaled/topical)", before:"Continue usual dose on the morning of surgery", lab:"Glucose", after:"Major or intermediate/body-surface surgery: hydrocortisone 100 mg IV at induction then 200 mg/24 h infusion (alternatively dexamethasone 6–8 mg IV covers 24 h); while NBM 200 mg/24 h IV or 50 mg IM 6-hourly; then double the usual oral dose for 48 h (up to a week if complicated). Bowel prep procedures: continue normal dose", grade:"Association of Anaesthetists / RCP / SfE 2020 (Table 2)",
+            notes:"Individualise by dose, duration and surgical stress; some patients need no supplement, others a single dose or several days. Watch for impending crisis: malaise, somnolence, orthostatic hypotension, hyponatraemia, unexplained fever — give 100 mg hydrocortisone and reassess." }
+        ] },
+
+      { group:"Endocrine", name:"Thyroid hormone · antithyroid drugs", agents:"levothyroxine · thiamazole (methimazole) · carbimazole · propylthiouracil", brands:"T4 Thyrohormone Unimazole Thyrozol",
+        doses:[{ label:"Chronic therapy", before:"Continue, including the morning of surgery (levothyroxine half-life ≈ 6–7 days, so a missed dose is harmless; antithyroid drugs continue to the morning of surgery)", lab:"TSH pre-operatively in treated hypothyroid patients to confirm adequate replacement; defer elective surgery in uncontrolled hyper-/hypothyroidism", after:"Continue usual dose; consult endocrinology if a long nil-by-mouth period is expected", grade:"UKCPA Handbook of Perioperative Medicines (levothyroxine / liothyronine records)",
+          notes:"Isolated reports of marked hypertension and tachycardia with ketamine in patients on levothyroxine; omeprazole/lansoprazole may reduce levothyroxine absorption." }] },
+
+      { group:"Neurological / psychiatric", name:"Antiepileptics", agents:"levetiracetam · valproate · carbamazepine · lamotrigine · phenytoin · topiramate", brands:"Keppra Depakine Tegretol Lamictal Epanutin Topamac",
+        doses:[{ label:"Chronic therapy", before:"Continue, including the morning of surgery", lab:"Level for phenytoin/carbamazepine/valproate if control uncertain", after:"Continue; IV formulations (levetiracetam, valproate, phenytoin) if NPO", grade:"UKCPA Handbook of Perioperative Medicines (carbamazepine, eslicarbazepine, valproate records)",
+          notes:"Take regular doses on the morning of surgery; restart immediately post-op — if oral intake is not possible, ask a neurologist for the preparation, dose and route (carbamazepine has no IV form). Check sodium pre- and post-op with carbamazepine/eslicarbazepine. Valproate: avoid carbapenems (rapid fall in levels), caution with aspirin and paracetamol. ESAIC 2018 only advises early neurological consultation for severe or poorly controlled neurological disease (2B). Valproate may impair platelet function — note before neuraxial blocks." }] },
+
+      { group:"Neurological / psychiatric", name:"Parkinson's medication", agents:"levodopa/carbidopa · pramipexole · ropinirole · rotigotine patch · rasagiline · selegiline", brands:"Sinemet Madopar Mirapexin Requip Neupro Azilect",
+        doses:[{ label:"Chronic therapy", before:"Continue up to induction; keep dosing times as close to usual as possible (first on the list)", lab:"", after:"Resume immediately; rotigotine patch or NG levodopa if NPO — never omit levodopa or dopamine agonists (akinesia, parkinsonism-hyperpyrexia syndrome); amantadine, MAO-B and COMT inhibitors may be omitted short-term. Avoid metoclopramide, droperidol, prochlorperazine, haloperidol (use domperidone/ondansetron/cyclizine); MAO-B inhibitors: caution with pethidine/tramadol", grade:"UKCPA Handbook (Parkinson's overview; co-careldopa, rotigotine records) · NICE NG71 · Parkinson's UK",
+          notes:"Regional anaesthesia allows continued dosing and symptom monitoring. Rotigotine dose conversion: parkinsonscalculator.com or www.parkinsons.org.uk/medication-dose-calculators; remove the patch for MRI and cardioversion (aluminium backing); reduce starting dose in frail/delirious patients; rotigotine may be insufficient for high levodopa-equivalent doses." }] },
+
+      { group:"Neurological / psychiatric", name:"Antidepressants — SSRI / SNRI / TCA", agents:"sertraline · escitalopram · paroxetine · venlafaxine · duloxetine · amitriptyline", brands:"Zoloft Cipralex Seroxat Efexor Cymbalta Saroten",
+        doses:[{ label:"Chronic therapy", before:"Continue (discontinuation syndrome and relapse outweigh the small bleeding/serotonergic risks)", lab:"Sodium in elderly on SSRIs", after:"Continue", grade:"ESAIC 2018: do not discontinue 1B · SSRI 2B · TCA cardiac evaluation 2B",
+          notes:"ESAIC 2018: patients on TCAs should have a comprehensive cardiac evaluation before anaesthesia (2B); insufficient evidence to stop SSRIs peri-operatively (2B). SSRIs: modestly increased bleeding, relevant with concomitant antithrombotics. Avoid serotonergic combinations (tramadol, pethidine, methylene blue, linezolid). TCAs: avoid ephedrine/indirect sympathomimetics; QT and arrhythmia caution." }] },
+
+      { group:"Neurological / psychiatric", name:"MAO inhibitors", agents:"moclobemide (reversible) · phenelzine · tranylcypromine (irreversible)", brands:"Aurorix Nardil Parnate",
+        doses:[{ label:"Chronic therapy", before:"Irreversible MAOIs: stop at least 2 weeks before anaesthesia and switch to a reversible MAOI (moclobemide) to avoid relapse. Reversible MAOI: surgery can proceed", lab:"", after:"Resume / continue reversible agent", grade:"ESAIC 2018 1C",
+          notes:"If an irreversible MAOI cannot be stopped (guideline notes this is still debated), use an MAOI-safe technique: no pethidine, tramadol, dextromethorphan or indirect sympathomimetics (ephedrine); direct vasopressors in reduced doses; avoid pancuronium." }] },
+
+      { group:"Neurological / psychiatric", name:"Lithium", agents:"lithium carbonate", brands:"Milithin Priadel",
+        doses:[{ label:"Chronic therapy", before:"Stop 72 h before surgery (2B). Minor surgery under local anaesthesia: continue (2C)", lab:"Lithium level (check within one week of restarting), electrolytes, creatinine, TSH, ECG", after:"Restart when electrolytes are normal, the patient is haemodynamically stable and able to eat and drink (2B)", grade:"ESAIC 2018 2B / 2C",
+          notes:"Avoid NSAIDs, ACEi/ARB changes and dehydration — all raise lithium levels. Prolongs neuromuscular block." }] },
+
+      { group:"Neurological / psychiatric", name:"Antipsychotics · benzodiazepines", agents:"olanzapine · quetiapine · risperidone · clozapine · haloperidol · diazepam · lorazepam", brands:"Zyprexa Seroquel Risperdal Leponex Aloperidin Stedon Tavor",
+        doses:[{ label:"Chronic therapy", before:"Continue (withdrawal → relapse, delirium, seizures with benzodiazepines)", lab:"ECG (QTc) with antipsychotics; FBC with clozapine", after:"Continue; substitute parenteral benzodiazepine if NPO", grade:"ESAIC 2018 2B (antipsychotics in chronic schizophrenia: continue) · DGAI A.2.4.2 (benzodiazepines: continue/substitute)",
+          notes:"Clozapine: higher risk of ileus and hypotension; discuss with psychiatry for major surgery." }] },
+
+      { group:"Pain / dependence", name:"Chronic opioids · opioid substitution", agents:"morphine · oxycodone · fentanyl patch · buprenorphine · methadone", brands:"Oxycontin Durogesic Subutex Suboxone",
+        doses:[{ label:"Chronic therapy", before:"Continue the usual dose on the day of surgery (patches stay on). Buprenorphine and methadone: continue and add multimodal analgesia rather than stopping", lab:"", after:"Continue baseline opioid + additional analgesia; plan with acute pain service", grade:"DGAI A.2.4.1–2 (continue/substitute; no grade)",
+          notes:"Record agent and dose pre-operatively; expect tolerance and higher requirements. Gabapentinoids, cannabinoids, Z-drugs: continue to avoid withdrawal." }] },
+
+      { group:"Respiratory", name:"Inhalers", agents:"salbutamol · ICS/LABA · LAMA · theophylline", brands:"Aerolin Seretide Symbicort Spiriva",
+        doses:[{ label:"Chronic therapy", before:"Continue, including on the morning of surgery (bring inhalers); salbutamol before induction in asthma/COPD is common practice", lab:"Theophylline level if on it", after:"Continue", grade:"Universal practice; UKCPA Handbook (individual records not checked for this build)", verify:true }] },
+
+      { group:"Gastrointestinal", name:"PPIs · H2 blockers", agents:"omeprazole · esomeprazole · pantoprazole · famotidine", brands:"Losec Nexium Controloc Peptan",
+        doses:[{ label:"Chronic therapy", before:"Continue; give on the morning of surgery", lab:"", after:"Continue", grade:"Universal practice; UKCPA Handbook (individual records not checked for this build)", verify:true }] },
+
+      { group:"Immunology / rheumatology", name:"Immunosuppressants · DMARDs · biologics", agents:"methotrexate · azathioprine · ciclosporin · tacrolimus · mycophenolate · hydroxychloroquine · TNF inhibitors · JAK inhibitors", brands:"Imuran Sandimmun Prograf Cellcept Plaquenil Humira Enbrel Xeljanz",
+        doses:[{ label:"Chronic therapy", before:"Transplant immunosuppression: continue without interruption. Conventional DMARDs — methotrexate, leflunomide, hydroxychloroquine, sulfasalazine, apremilast: continue through surgery. Biologics (TNF inhibitors, abatacept, tocilizumab, IL-17/IL-23/IL-12 agents, rituximab): withhold and schedule surgery at the end of the dosing interval (e.g. weekly drug → surgery in week 2; rituximab → month 7). JAK inhibitors (tofacitinib, baricitinib, upadacitinib): hold 3 days before. Severe SLE: continue mycophenolate, azathioprine, ciclosporin, tacrolimus; non-severe SLE: hold these one week before", lab:"Drug levels (tacrolimus, ciclosporin), renal function, FBC, LFTs", after:"Restart biologics ≥ 14 days post-op once the wound shows evidence of healing and there is no infection; conventional DMARDs continue", grade:"ACR / AAHKS 2022 (hip & knee arthroplasty; conditional recommendations) — extrapolated to other elective surgery",
+          notes:"Not covered by a European anaesthesia guideline; the German Society for Rheumatology has similar updated recommendations. Decision shared with the rheumatologist/transplant team." }] },
+
+      { group:"Hormonal", name:"Oestrogen-containing contraception · HRT", agents:"combined oral contraceptive · HRT", brands:"",
+        doses:[{ label:"Elective surgery with high VTE risk / prolonged immobilisation", before:"Combined hormonal contraception: stop 4 weeks before major elective surgery, surgery to the legs or any surgery with prolonged lower-limb immobilisation, and switch to a progestogen-only or non-hormonal method (BNF / FSRH 2019). Oestrogen-containing HRT: NICE NG89 advises considering stopping 4 weeks before elective surgery; if not stopped, give pharmacological thromboprophylaxis. Progestogen-only methods: continue", lab:"", after:"Restart COC at the first menses occurring ≥ 2 weeks after full mobilisation", grade:"BNF / FSRH 2019 · NICE NG89 (UK)",
+          notes:"Evidence is weak (NEJM Evidence 2022 review); the Association of Anaesthetists has no specific guideline. Not required for short, mobile day-case procedures." }] },
+
+      { group:"Supplements", name:"Herbal products", agents:"ginkgo · garlic · ginseng · St John's wort · fish oil (high dose)", brands:"",
+        doses:[{ label:"All", before:"Stop 2 weeks before surgery (2B); St John's wort at least 5 days before. Ask explicitly about herbal products and concomitant NSAIDs (2B)", lab:"", after:"—", grade:"ESAIC 2018 2B",
+          notes:"No evidence for postponing elective surgery, but for high-risk 'closed-compartment' surgery (e.g. intracranial) weigh the possible haemostatic impairment (2B). Valerian: abrupt stop mimics benzodiazepine withdrawal." }] }
     ]
   },
 
@@ -396,13 +559,14 @@ function renalBox(r){
 }
 function doseRow(d, flag){
   return `<div class="dose">
-    <h4>${esc(d.label)} ${d.grade?`<span class="grade">${esc(d.grade)}</span>`:""}</h4>
+    <h4>${esc(d.label)} ${d.grade?`<span class="grade">${esc(d.grade)}</span>`:""}${d.verify?`<span class="grade warnb" title="Universal practice; not checked against an individual guideline record">verify</span>`:""}</h4>
     <div class="cols">
       ${cell("Last dose → procedure", d.before, flag, true)}
       ${cell("Procedure → next dose", d.after)}
       ${cell("Lab target", d.lab)}
     </div>
     ${renalBox(d.renal)}
+    ${d.asra?`<div class="intl"><span class="grade">International</span> ${d.asra}</div>`:""}
     ${d.notes?`<p class="extra">${d.notes}</p>`:""}
   </div>`;
 }
@@ -555,14 +719,14 @@ function syncChips(){
   });
 }
 function render(){
-  for(const t of ["regional","surgical","planner","ref"]){
+  for(const t of ["regional","surgical","other","planner","ref"]){
     $(`#tab-${t}`).setAttribute("aria-selected", state.tab===t);
     $(`#panel-${t}`).classList.toggle("hidden", state.tab!==t);
   }
   $("#chips-regional").classList.toggle("hidden", state.tab!=="regional");
   $("#chips-surgical").classList.toggle("hidden", state.tab!=="surgical");
   $("#searchBox").classList.toggle("hidden", state.tab==="ref" || state.tab==="planner");
-  $("#srcLabel").textContent = state.tab==="surgical" ? "ESAIC 2023" : state.tab==="ref" ? "ESAIC/ESRA 2022 · Table 1" : state.tab==="planner" ? "Planner" : "ESAIC/ESRA 2022";
+  $("#srcLabel").textContent = state.tab==="surgical" ? "ESAIC 2023" : state.tab==="other" ? "ESC 2022 · DGAI 2024 · ESAIC 2018" : state.tab==="ref" ? "ESAIC/ESRA 2022 · Table 1" : state.tab==="planner" ? "Planner" : "ESAIC/ESRA 2022";
   $("#banner").textContent = DATA.disclaimer;
   syncChips();
 
@@ -587,6 +751,12 @@ function render(){
     $("#panel-surgical").innerHTML = rules(S.general, "Key rules for surgical interruption") +
       `<p class="note">Summary shows the ${state.proc==="low"?"low":"intermediate / high"} bleeding-risk row. Open a drug for every scenario.</p>` +
       renderList(S.drugs, pickSurgicalRow);
+  }
+  if(state.tab==="other"){
+    const O = DATA.other;
+    $("#panel-other").innerHTML = rules(O.general, "Key rules for other chronic medication") +
+      `<p class="note">Rows marked <span class="grade warnb">verify</span> are universal practice but were not checked against an individual guideline record for this build. Non-European sources (UK, US) are used where no ESAIC/ESC/DGAI recommendation exists and are named in the grade. Grades: ESC class/level; DGAI A (soll) / B (sollte) / 0 (kann).</p>` +
+      renderList(O.drugs, d=>d.doses[0]);
   }
   if(state.tab==="planner") renderPlanner();
   if(state.tab==="ref"){
@@ -621,10 +791,8 @@ $("#clear").addEventListener("click", ()=>{ qi.value=""; state.q=""; $("#searchB
 render();
 if("serviceWorker" in navigator){
   const bar = document.getElementById("updBar");
-  const show = w => { bar.classList.add("on"); bar.querySelector("button").onclick = () => { bar.querySelector("button").textContent="Updating…"; w.postMessage("SKIP_WAITING"); }; };
   navigator.serviceWorker.register("sw.js").then(reg => {
-    if(reg.waiting) show(reg.waiting);
-    reg.addEventListener("updatefound", () => { const w = reg.installing; w && w.addEventListener("statechange", () => { if(w.state==="installed" && navigator.serviceWorker.controller) show(w); }); });
+    reg.addEventListener("updatefound", () => { const w = reg.installing; w && w.addEventListener("statechange", () => { if(w.state==="installed" && navigator.serviceWorker.controller) bar.classList.add("on"); }); });
     const check = () => reg.update().catch(()=>{});
     check(); document.addEventListener("visibilitychange", () => { if(document.visibilityState==="visible") check(); });
     setInterval(check, 30*60*1000);

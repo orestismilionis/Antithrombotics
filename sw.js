@@ -1,14 +1,13 @@
-// Service worker: offline support + update notification.
-// No need to edit CACHE after changing files: the app detects a new version and
-// shows an "Update" button; the new version activates when the user taps it.
-const CACHE = "antithrombotic-v6";
+// Service worker: offline support + fully automatic updates.
+// Nothing to edit after changing files on GitHub — the app checks for a new
+// version on every launch and reloads itself when one is found.
+const CACHE = "antithrombotic-v7";
 const FILES = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(FILES.map(f => c.add(new Request(f, {cache:"reload"})).catch(()=>{})))));
-  // deliberately no skipWaiting(): the page asks for it when the user taps "Update"
+  self.skipWaiting();
 });
-self.addEventListener("message", e => { if (e.data === "SKIP_WAITING") self.skipWaiting(); });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
