@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antithrombotic timing — ESAIC/ESRA</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1E3A8A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Antithrombotic">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Peri-operative antithrombotic interruption and resumption intervals: ESAIC/ESRA 2022 (regional anaesthesia) and ESAIC 2023 (surgical bleeding).">
+<style>
+/* ============================================================
+   THEME — change colours here
+   ============================================================ */
+:root{
+  --bg:#FFFFFF; --paper:#FFFFFF; --soft:#F3F5F9; --ink:#111827; --muted:#4B5563; --line:#D9DEE7;
+  --blue:#1E3A8A; --blue-soft:#E8EDF8; --amber:#9A6A0F; --amber-soft:#FBF1D8;
+  --red:#A8281F; --ok:#2E6B3A; --radius:14px; --w:1040px; --tap:46px;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  box-sizing:border-box;
+}
+*{box-sizing:inherit}
+html{scroll-padding-top:calc(var(--sat) + 120px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+a{color:var(--blue)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* sticky top: title + search + chips */
+.top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(var(--sat) + 10px) 14px 10px}
+.top .in{max-width:var(--w);margin:0 auto}
+.titlerow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.titlerow h1{font-size:1.15rem;margin:0;flex:1;letter-spacing:-.01em}
+.titlerow .src{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:0 12px;height:var(--tap)}
+.search svg{flex:none;width:20px;height:20px;color:var(--muted)}
+.search input{flex:1;border:0;background:none;font:inherit;color:var(--ink);min-width:0;height:100%}
+.search input:focus{outline:none}
+.search button{border:0;background:none;color:var(--muted);padding:6px;display:none}
+.search.has button{display:block}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chips .lbl{flex:none;align-self:center;font-size:.82rem;color:var(--muted);padding-right:2px}
+.chips button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:.92rem;font-weight:600}
+.chips button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.chips .sep{flex:none;width:1px;background:var(--line);margin:4px 4px}
+
+/* tabs: top on desktop, bottom bar on phone */
+.tabs{display:flex;gap:4px;max-width:var(--w);margin:0 auto;border-bottom:2px solid var(--line)}
+.tabs button{flex:1;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:10px 6px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.9rem}
+.tabs button svg{width:22px;height:22px}
+.tabs button[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue)}
+@media (max-width:720px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--paper);border-top:1px solid var(--line);border-bottom:0;padding:6px 6px calc(var(--sab) + 6px);margin:0}
+  .tabs button{border-bottom:0;margin:0;border-radius:10px;padding:6px 4px;font-size:.78rem}
+  .tabs button[aria-selected="true"]{background:var(--blue-soft)}
+  body{padding-bottom:calc(var(--sab) + 78px)}
+}
+
+.wrap{max-width:var(--w);margin:0 auto;padding:14px 14px 40px}
+
+.rules{background:var(--blue-soft);border-radius:var(--radius);margin:0 0 14px;overflow:hidden}
+.rules summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:8px;min-height:var(--tap)}
+.rules summary::-webkit-details-marker{display:none}
+.rules summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg);transition:transform .15s}
+.rules[open] summary::after{transform:rotate(-135deg)}
+.rules ul{margin:0;padding:0 14px 12px 30px;font-size:.92rem;color:var(--ink)}
+.rules li{margin:5px 0}
+
+.banner{font-size:.85rem;color:var(--muted);margin:0 0 14px;padding:0 2px}
+
+.group-h{font-size:.82rem;font-weight:700;color:var(--muted);margin:18px 2px 8px}
+
+/* drug card */
+.drug{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.drug summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;min-height:62px}
+.drug summary::-webkit-details-marker{display:none}
+.drug .name{font-weight:700;font-size:1.02rem;grid-column:1}
+.drug .agents{color:var(--muted);font-size:.84rem;grid-column:1;line-height:1.3}
+.drug .quick{grid-column:2;grid-row:1/3;text-align:right;color:var(--blue);font-weight:700;font-size:1rem;line-height:1.2;max-width:46vw}
+.drug .quick small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
+.drug .quick.red{color:var(--red)} .drug .quick.ok{color:var(--ok)}
+.drug[open] summary{border-bottom:1px solid var(--line);background:var(--soft)}
+.drug .body{padding:4px 14px 12px}
+
+.dose{padding:12px 0;border-top:1px dashed var(--line)}
+.dose:first-child{border-top:0}
+.dose h4{margin:0 0 10px;font-size:.98rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.grade{font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--blue-soft);color:var(--blue)}
+.cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media (max-width:720px){.cols{grid-template-columns:1fr}}
+.cell{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:.93rem;border-left:4px solid var(--line)}
+.cell.main{border-left-color:var(--blue)}
+.cell .lbl{font-size:.76rem;color:var(--muted);margin-bottom:3px}
+.cell .val{font-weight:700;font-size:1.02rem;color:var(--ink)}
+.cell.main .val{color:var(--blue);font-size:1.1rem}
+.cell .val.red{color:var(--red)} .cell .val.ok{color:var(--ok)}
+.cell p{margin:0;color:var(--muted)}
+.renal{margin-top:8px;padding:8px 10px;border-radius:10px;background:var(--amber-soft);border-left:4px solid var(--amber);font-size:.9rem}
+.renal.active{box-shadow:0 0 0 2px var(--amber) inset}
+.extra{font-size:.88rem;color:var(--muted);margin:10px 0 0}
+
+table.ref{width:100%;border-collapse:collapse;font-size:.88rem;background:var(--paper)}
+table.ref th,table.ref td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+table.ref th{background:var(--soft)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+.note{font-size:.9rem;color:var(--muted);margin:0 0 12px}
+
+footer{margin-top:30px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+footer p{margin:6px 0}
+.hidden{display:none!important}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.drug .body{animation:fade .18s ease-out}@keyframes fade{from{opacity:0}to{opacity:1}}}
+@media print{.top,.tabs{display:none}.drug{break-inside:avoid}}
+
+.brands{color:var(--blue);font-weight:500}
+.picker{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:12px}
+.picker label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.picker select{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);min-height:var(--tap)}
+.picker small{display:block;color:var(--muted);font-size:.78rem;margin-top:6px}
+.plan-form{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
+.fl{display:block;font-size:.85rem;color:var(--muted);margin:10px 0 0}
+.fl input{display:block;width:100%;margin-top:6px;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--soft);color:var(--ink);min-height:var(--tap)}
+.drugchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.drugchips button{border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 12px;font-size:.88rem;text-align:left}
+.drugchips button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.plan-out{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;margin-bottom:12px}
+@media (max-width:720px){.plan-out{grid-template-columns:1fr}}
+.po{background:var(--blue-soft);border-radius:12px;padding:12px 14px}
+.po.mid{background:var(--soft)}
+.po .lbl{font-size:.78rem;color:var(--muted)}
+.po .big{font-weight:700;font-size:1.15rem;color:var(--blue);margin:2px 0}
+.po small{color:var(--muted);font-size:.8rem}
+.warn{background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:10px;padding:8px 12px;margin:12px 0;font-size:.9rem}
+.warn p{margin:4px 0}
+.btn{margin-top:8px;background:var(--blue);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600;min-height:var(--tap)}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="in">
+  <div class="titlerow">
+    <h1>Antithrombotic timing</h1>
+    <span class="src" id="srcLabel">ESAIC/ESRA 2022</span>
+  </div>
+  <div class="search" id="searchBox">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Search drug (apixaban, enoxaparin, clopidogrel…)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button id="clear" aria-label="Clear search">✕</button>
+  </div>
+  <div class="chips" id="chips-regional">
+    <span class="lbl">Block</span>
+    <button data-k="block" data-v="high" aria-pressed="true">Neuraxial / deep</button>
+    <button data-k="block" data-v="low" aria-pressed="false">Superficial</button>
+    <span class="sep"></span>
+    <span class="lbl">CrCl</span>
+    <button data-k="renal" data-v="normal" aria-pressed="true">&gt; 50</button>
+    <button data-k="renal" data-v="mod" aria-pressed="false">30–50</button>
+    <button data-k="renal" data-v="severe" aria-pressed="false">&lt; 30</button>
+  </div>
+  <div class="chips hidden" id="chips-surgical">
+    <span class="lbl">Procedure risk</span>
+    <button data-k="proc" data-v="low" aria-pressed="false">Low bleeding</button>
+    <button data-k="proc" data-v="high" aria-pressed="true">Intermediate / high</button>
+    <span class="sep"></span>
+    <span class="lbl">CrCl</span>
+    <button data-k="renal" data-v="normal" aria-pressed="true">&gt; 50</button>
+    <button data-k="renal" data-v="mod" aria-pressed="false">30–50</button>
+    <button data-k="renal" data-v="severe" aria-pressed="false">&lt; 30</button>
+  </div>
+</div></div>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-regional" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M7 7l5-4 5 4M7 17l5 4 5-4"/></svg>Regional</button>
+  <button role="tab" id="tab-surgical" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 18 6l2 2L6 22H4zM14 10l-2-2 2-2 2 2"/></svg>Surgery</button>
+  <button role="tab" id="tab-planner" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>Planner</button>
+  <button role="tab" id="tab-ref" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Doses</button>
+</nav>
+
+<main class="wrap">
+  <p class="banner" id="banner"></p>
+  <section id="panel-regional" role="tabpanel"></section>
+  <section id="panel-surgical" role="tabpanel" class="hidden"></section>
+  <section id="panel-planner" role="tabpanel" class="hidden"></section>
+  <section id="panel-ref" role="tabpanel" class="hidden"></section>
+  <footer id="footer"></footer>
+</main>
+
+<script>
+/* ============================================================
+   DATA — the only block you normally need to edit.
+   hours = numeric intervals used by the Planner (null = not
+   time-based, see text). brands = trade names for search.
+   ============================================================ */
+const DATA = {
+  version: "2026-10-03",
+  editor: "Orestis Milionis, MD — 2nd Dept of Anaesthesiology, Attikon University Hospital",
+  issuesUrl: "https://github.com/orestismilionis/Antithrombotics/issues",
+  disclaimer: "Decision support only. Verify against the current guideline text and your institutional protocol and apply individual risk–benefit assessment. Intervals are transcribed from the published tables; they do not replace clinical judgement.",
+  sources: [
+    { key:"ESAIC/ESRA 2022", text:"Kietaibl S, Ferrandis R, Godier A, et al. Regional anaesthesia in patients on antithrombotic drugs: Joint ESAIC/ESRA guidelines. Eur J Anaesthesiol 2022;39:100–132. DOI 10.1097/EJA.0000000000001600 (Tables 1–4; R1–R40).",
+      url:"https://esaic.org/wp-content/uploads/2023/12/regional_anaesthesia_in_patients_on_antithrom.pdf" },
+    { key:"ESAIC 2023", text:"Kietaibl S, Ahmed A, Afshari A, et al. Management of severe peri-operative bleeding: Guidelines from the ESAIC, second update 2022. Eur J Anaesthesiol 2023;40:226–304. DOI 10.1097/EJA.0000000000001803 (Table 2, R2).",
+      url:"https://journals.lww.com/ejanaesthesiology/fulltext/2023/04000/management_of_severe_peri_operative_bleeding_.2.aspx" }
+  ],
+
+  /* ---- Table 2 (2022): block categorisation. verify:true = column assignment unclear in the PDF text extraction — check against the printed table. ---- */
+  blocks: [
+    { region:"Neuraxial", items:[ ["Spinal","deep"], ["Epidural (lumbar / thoracic)","deep"] ] },
+    { region:"Head & neck", items:[ ["Stellate ganglion","deep"], ["Deep cervical plexus","deep"], ["Cervical paravertebral","deep"], ["Peribulbar","deep",true], ["Occipital","superficial",true], ["Sub-Tenon's","superficial",true], ["Superficial cervical plexus","superficial"] ] },
+    { region:"Upper limb", items:[ ["Infraclavicular","deep"], ["Interscalene","superficial"], ["Supraclavicular","superficial"], ["Axillary","superficial"], ["Suprascapular","superficial"], ["Ulnar / radial / median (forearm, wrist)","superficial"] ] },
+    { region:"Thorax", items:[ ["Thoracic paravertebral","deep"], ["Parasternal intercostal plane (deep)","deep",true], ["Parasternal intercostal plane (superficial)","superficial",true], ["Serratus anterior plane","superficial",true], ["Erector spinae plane","superficial",true], ["Intercostal","superficial",true], ["Interpectoral / pecto-serratus (PECS)","superficial",true] ] },
+    { region:"Abdomen & pelvis", items:[ ["Ilioinguinal / iliohypogastric","superficial"], ["Transversus abdominis plane (TAP)","superficial"], ["Rectus sheath","superficial"], ["Genitofemoral (genital branch)","superficial"], ["Pudendal","superficial",true] ] },
+    { region:"Lower limb & back", items:[ ["Lumbar plexus / psoas compartment","deep"], ["Lumbar paravertebral","deep"], ["Lumbar sympathectomy","deep"], ["Quadratus lumborum","deep"], ["Fascia transversalis","deep"], ["Sacral plexus","deep"], ["PENG","deep"], ["Sciatic — proximal approaches (parasacral, transgluteal)","deep"], ["Femoral / femoral triangle","superficial"], ["Adductor canal","superficial"], ["Sciatic — subgluteal / popliteal","superficial"], ["Fascia iliaca","superficial"], ["Lateral cutaneous nerve of thigh","superficial"], ["Genitofemoral (femoral branch)","superficial"], ["Sural / saphenous / tibial / peroneal (ankle)","superficial"] ] }
+  ],
+
+  /* ---- Tab: regional anaesthesia (2022, Table 3 / Table 4) ---- */
+  regional: {
+    generalHigh: [
+      "Applies to neuraxial blocks and deep (non-compressible) peripheral blocks, and equally to needle insertion, catheter insertion and catheter removal (R36).",
+      "Drug combinations: use the interval of the drug with the longest interval (R19). Low-dose aspirin adds 0 h.",
+      "Ultrasound guidance and bleeding-risk scores do not change the intervals (R22, R35).",
+      "Bloody tap: consider a longer interval to the next dose (R39). Monitor neurology ≥ 24 h after neuraxial/deep blocks (R40).",
+      "Next dose: low doses ≈ 6 h post-op (8 h − t<sub>max</sub>), high doses ≈ 24 h post-op. VKA, DOAC, high-dose LMWH and high-dose UFH should not be given with a neuraxial catheter in situ.",
+      "Obstetrics: same intervals as non-pregnant (LMWH 10–12 h); deviation only after multidisciplinary risk–benefit discussion (R2, R5, R8, R11, R14)."
+    ],
+    generalLow: [
+      "Superficial, compressible blocks (Table 2): withdrawal of antithrombotic drugs is not compulsory (Table 4).",
+      "Time from last intake: zero for low-dose agents; zero for VKA, high-dose LMWH/UFH, high-dose aspirin, P2Y12 inhibitors and combinations provided the patient is within or below their individual therapeutic range.",
+      "Next dose: at the routinely prescribed next time point. No routine testing (consider a drug level if accumulation is suspected, e.g. renal insufficiency).",
+      "If the minimum interval has not elapsed, management depends on compressibility of the site and vicinity of large vessels / neuraxial structures (2C). Choose the lowest-bleeding-risk technique, use ultrasound (R37, R38)."
+    ],
+    drugs: [
+      { group:"Vitamin K antagonists", name:"VKA", agents:"acenocoumarol · warfarin · phenprocoumon · fluindione", brands:"Sintrom Panwarfin Coumadin Marcoumar Marevan",
+        doses:[
+          { label:"Acenocoumarol", before:"≈ 3 days — until INR normal", lab:"INR in the local normal range (e.g. 1.1); INR < 1.5 acceptable in selected patients (2C)", after:"Per VTE-prophylaxis / therapeutic guidance; with a catheter in situ only after removal (low-dose LMWH may bridge)", grade:"1C / 2C", hours:{before:72, after:null, labRequired:true} },
+          { label:"Warfarin · fluindione", before:"≈ 5 days — until INR normal", lab:"INR in the local normal range; < 1.5 acceptable in selected patients (2C)", after:"As above", grade:"1C / 2C", hours:{before:120, after:null, labRequired:true} },
+          { label:"Phenprocoumon", before:"≈ 7 days — until INR normal", lab:"INR in the local normal range; < 1.5 acceptable in selected patients (2C)", after:"As above", grade:"1C / 2C", hours:{before:168, after:null, labRequired:true} }
+        ],
+        notes:"Emergency reversal for neuraxial/deep procedures: 4-factor PCC (INR-adjusted) + vitamin K 10 mg (R31, 2C)." },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — low dose", agents:"rivaroxaban 10 mg od · apixaban 2.5 mg bd · edoxaban (see Doses)", brands:"Xarelto Eliquis Lixiana",
+        doses:[
+          { label:"Rivaroxaban 10 mg · edoxaban", before:"24 h", lab:"No testing", after:"≈ 6 h post-op (VTE-prophylaxis guidance); longer after a bloody tap. Catheter in situ: only after removal", renal:{severe:"CrCl < 30: ≥ 30 h"}, grade:"1C", hours:{before:24, severe:30, after:6} },
+          { label:"Apixaban 2.5 mg bd", before:"36 h", lab:"No testing", after:"≈ 6 h post-op; catheter in situ: only after removal", grade:"1C", hours:{before:36, after:6} }
+        ] },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors — high dose", agents:"rivaroxaban 15–20 mg · apixaban 5 mg bd (10 mg bd loading) · edoxaban 30–60 mg", brands:"Xarelto Eliquis Lixiana",
+        doses:[{ label:"High dose", before:"72 h, or until target laboratory value", lab:"Drug level < 30 ng/ml (alternative anti-Xa ≤ 0.1 IU/ml) — may shorten or lengthen the interval (R26, 2C)", after:"≈ 24 h post-op (therapeutic guidance). Not with a neuraxial catheter in situ",
+          renal:{severe:"CrCl < 30: proceed only when the calibrated assay is within the local normal range (2C)"}, grade:"1C", hours:{before:72, severeLab:true, after:24},
+          notes:"Andexanet alpha and PCC/aPCC do not shorten the intervals (R32)." }] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran — low dose", agents:"220 mg od (150 mg od if CrCl 30–50, age ≥ 75, or verapamil/amiodarone/quinidine)", brands:"Pradaxa",
+        doses:[{ label:"Low dose", before:"48 h", lab:"No testing", after:"≈ 6 h post-op; catheter in situ: only after removal", grade:"1C", hours:{before:48, after:6} }] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran — high dose", agents:"150 mg bd · 110 mg bd", brands:"Pradaxa",
+        doses:[{ label:"High dose", before:"72 h, or until target laboratory value", lab:"Dabigatran < 30 ng/ml, or thrombin time in the local normal range (R27, 2C)", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ",
+          renal:{mod:"CrCl 30–50: proceed only when thrombin time / dabigatran level is within the local normal range (2C)", severe:"CrCl < 30: assay within normal range required; drug accumulates markedly (generally contraindicated)"}, grade:"1C", hours:{before:72, modLab:true, severeLab:true, after:24},
+          notes:"Idarucizumab fully reverses dabigatran for emergency neuraxial/deep procedures (R32, 2C); PCC/aPCC do not change the interval." }] },
+
+      { group:"Heparins", name:"LMWH — low dose", agents:"≤ 50 IU anti-Xa/kg/day · enoxaparin 40 mg · dalteparin 5000 IU · tinzaparin 4500 IU · nadroparin 5700 IU per day", brands:"Clexane Fragmin Innohep Fraxiparine Lovenox",
+        doses:[{ label:"Low (prophylactic) dose", before:"12 h", lab:"No testing (consider anti-Xa in renal insufficiency, frail, elderly or very low weight)", after:"≈ 6 h post-op. May continue with a neuraxial catheter in situ", renal:{severe:"CrCl < 30: halve the dose or double the interval to 24 h"}, grade:"1C", hours:{before:12, severe:24, after:6},
+          notes:"Obstetrics: 10–12 h as in the non-pregnant population (R8)." }] },
+
+      { group:"Heparins", name:"LMWH — high dose", agents:"> 50 IU anti-Xa/kg/day (e.g. enoxaparin 1 mg/kg bd or 1.5 mg/kg od)", brands:"Clexane Fragmin Innohep Fraxiparine Lovenox",
+        doses:[{ label:"High (therapeutic) dose", before:"24 h, or until target laboratory value", lab:"Anti-Xa ≤ 0.1 IU/ml (R25, 2C)", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ — bridge with low dose until removal", renal:{severe:"CrCl < 30: halve the dose or double the interval to 48 h"}, grade:"1C", hours:{before:24, severe:48, after:24} }] },
+
+      { group:"Heparins", name:"UFH — low dose", agents:"SC ≤ 200 IU/kg/day (e.g. 5000 IU bd–tds) · IV ≤ 100 IU/kg/day", brands:"Heparin",
+        doses:[{ label:"Low dose", before:"4 h", lab:"No testing", after:"Per VTE-prophylaxis guidance (≈ 6 h); 1 h after the block for IV UFH in vascular surgery after risk–benefit analysis (2C). May continue with a catheter in situ", grade:"1C", hours:{before:4, after:6} }] },
+
+      { group:"Heparins", name:"UFH — high dose", agents:"SC > 200 IU/kg/day · therapeutic IV infusion", brands:"Heparin",
+        doses:[
+          { label:"IV infusion", before:"≈ 6 h — until target laboratory value", lab:"aPTT, anti-Xa or ACT within the local normal range", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ", grade:"2C", hours:{before:6, after:24, labRequired:true} },
+          { label:"SC high dose", before:"≈ 12 h — until target laboratory value", lab:"aPTT, anti-Xa or ACT within the local normal range", after:"≈ 24 h post-op. Not with a neuraxial catheter in situ", grade:"2C", hours:{before:12, after:24, labRequired:true} }
+        ], notes:"Protamine fully reverses UFH for emergency procedures (R33); avoid protamine overdose." },
+
+      { group:"Heparins", name:"Fondaparinux — low dose", agents:"2.5 mg/day SC", brands:"Arixtra",
+        doses:[{ label:"Low dose", before:"36 h", lab:"No testing", after:"Per VTE-prophylaxis guidance (EXPERT trial: 12 h after catheter removal)", renal:{mod:"CrCl < 50: ≥ 72 h, or reduce dose to 1.5 mg/day", severe:"CrCl < 50: ≥ 72 h, or reduce to 1.5 mg/day (contraindicated < 20 ml/min)"}, grade:"1C", hours:{before:36, mod:72, severe:72, after:12} }] },
+
+      { group:"Heparins", name:"Fondaparinux — high dose", agents:"> 2.5 mg/day (5–10 mg)", brands:"Arixtra", flag:"red",
+        doses:[{ label:"High dose", before:"Neuraxial procedures not recommended (1C). If unavoidable: ≈ 4 days, until target laboratory value", lab:"Calibrated anti-Xa ≤ 0.1 IU/ml", after:"Per therapeutic-anticoagulation guidance", grade:"1C / 2C", hours:{before:96, after:24, labRequired:true, notRecommended:true} }] },
+
+      { group:"Antiplatelet agents", name:"Aspirin — low dose", agents:"< 200 mg/day", brands:"Salospir Aspirin-Protect Aspirin Cardio", flag:"ok",
+        doses:[{ label:"Low dose", before:"0 — not a contraindication after risk–benefit analysis", lab:"No testing", after:"Routinely prescribed next time point", grade:"1C", hours:{before:0, after:0},
+          notes:"Single-shot spinal preferred over epidural (R16). Avoid combining with NSAIDs peri-operatively." }] },
+
+      { group:"Antiplatelet agents", name:"Aspirin — high dose", agents:"≥ 200 mg/day", brands:"Aspirin",
+        doses:[{ label:"High dose", before:"3 days (normal platelet count) to 7 days", lab:"Consider platelet function test within local normal range (R30, 2C)", after:"≥ 6 h", grade:"1C / 2C", hours:{before:72, beforeMax:168, after:6} }] },
+
+      { group:"Antiplatelet agents", name:"P2Y12 inhibitors", agents:"clopidogrel · prasugrel · ticagrelor", brands:"Plavix Iscover Efient Brilique",
+        doses:[
+          { label:"Clopidogrel", before:"5–7 days, or until platelet function test normal", lab:"Consider platelet function test (2C)", after:"75 mg: without delay · 300 mg loading: ≥ 2 days. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, beforeMax:168, after:0, afterAlt:"≥ 48 h if 300 mg loading"} },
+          { label:"Prasugrel", before:"7 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:168, after:24} },
+          { label:"Ticagrelor", before:"5 days", lab:"Consider platelet function test (2C)", after:"≥ 24 h. Catheter in situ: only after removal", grade:"1C / 2C", hours:{before:120, after:24} }
+        ],
+        notes:"Deep blocks are contraindicated on P2Y12 inhibitors (R18). Loading doses (ACS): do not perform neuraxial/deep blocks (R34). Catheter in situ with urgent DAPT: interdisciplinary management; remove immediately before a clopidogrel loading dose takes effect, or bridge with tirofiban (stop 8 h) / cangrelor (stop 3 h) (R20)." }
+    ]
+  },
+
+  /* ---- Tab: surgical interruption (2023, Table 2 R2) ---- */
+  surgical: {
+    general: [
+      "Low-bleeding-risk procedures in the guideline: skin surgery, dental / stomatological procedures, gastric and colonic endoscopy (biopsy allowed, polypectomy not), most anterior-chamber eye surgery (cataract).",
+      "Bridging: not suggested for VKA in low, moderate or high thrombotic risk (case-by-case only in very specific high-risk patients, 2C); not for DOACs (1C); LMWH bridging of antiplatelet agents not recommended (1A).",
+      "Urgent / semi-urgent surgery on antiplatelet agents: multidisciplinary decision (1C); operate under aspirin + P2Y12 inhibitor if possible, or at least under aspirin (2C).",
+      "Assess creatinine clearance in every DOAC patient scheduled for surgery (1B)."
+    ],
+    drugs: [
+      { group:"Antiplatelet agents", name:"Aspirin", agents:"75–325 mg/day", brands:"Salospir Aspirin-Protect",
+        doses:[
+          { label:"Secondary prevention", before:"Continue peri-operatively in most settings, especially cardiac surgery (1C). Maintain for low and moderate bleeding-risk procedures (1B). Interrupt only for very-high bleeding-risk procedures, never with coronary stents (1B)", lab:"", after:"Resume as soon as possible post-op (1C)", grade:"1B / 1C", hours:{before:0, after:0, continue:true},
+            notes:"Continue ≥ 4 weeks after bare-metal stent and 3–12 months after drug-eluting stent unless surgical bleeding risk on aspirin is unacceptable (1A). Intracranial surgery can be performed on low-dose aspirin (2C)." },
+          { label:"Primary prevention", before:"Discontinue pre-operatively (1B) — 3 days from last intake", lab:"", after:"Per indication", grade:"1B", hours:{before:72, after:null} },
+          { label:"If withdrawal is decided", before:"3 days from last intake to surgery; 5 days for procedures at high bleeding risk", lab:"", after:"As soon as possible post-op", grade:"1C", hours:{before:72, beforeMax:120, after:0} }
+        ] },
+
+      { group:"Antiplatelet agents", name:"P2Y12 inhibitors", agents:"clopidogrel · prasugrel · ticagrelor", brands:"Plavix Iscover Efient Brilique",
+        doses:[
+          { label:"Clopidogrel", before:"≥ 5 days from last intake, if feasible and not at high ischaemic risk", lab:"Platelet function testing may guide timing in cardiac surgery (B)", after:"Resume early, within 24–72 h, same agent; no recommendation on loading dose", grade:"2B / 2C", hours:{before:120, after:24, afterMax:72} },
+          { label:"Ticagrelor", before:"≥ 5 days", lab:"Platelet transfusion ineffective if ticagrelor given within 12–24 h (C)", after:"Within 24–72 h, same agent", grade:"2B / 2C", hours:{before:120, after:24, afterMax:72} },
+          { label:"Prasugrel", before:"≥ 7 days", lab:"", after:"Within 24–72 h, same agent", grade:"2B / 2C", hours:{before:168, after:24, afterMax:72} }
+        ],
+        notes:"Continue P2Y12 inhibitor ≥ 4 weeks after bare-metal stent and 3–6 months after drug-eluting stent (2A). Elective non-cardiac surgery is postponed until DAPT is complete (1A). If interruption is unacceptable, bridging with cangrelor or a short-acting GP IIb/IIIa inhibitor may be considered (2C). No NSAIDs with DAPT; coxibs possible (1C)." },
+
+      { group:"Vitamin K antagonists", name:"VKA", agents:"acenocoumarol · warfarin · phenprocoumon", brands:"Sintrom Panwarfin Coumadin Marcoumar",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Do not interrupt (skin, dental, endoscopy without polypectomy, cataract)", lab:"", after:"—", grade:"1C", hours:{before:0, after:0, continue:true} },
+          { label:"Procedure requiring INR < 1.5", before:"3–5 days from last intake (all thrombotic-risk categories). If INR > 1.5 the day before surgery: vitamin K 5 mg orally", lab:"INR < 1.5", after:"Resume within 24 h with prophylactic-dose LMWH until target INR on two consecutive measurements (1C). If unable to take oral medication: therapeutic-dose LMWH from 48–72 h once haemostasis is secured (1C)", grade:"1C", hours:{before:72, beforeMax:120, after:24, labRequired:true},
+            notes:"Bridging with LMWH/UFH is suggested against in low, moderate and high thrombotic risk; very specific high-risk patients (e.g. mechanical valve) case by case (2C)." },
+          { label:"Emergency moderate/high-bleeding-risk surgery", before:"Measure INR on admission; 4-factor PCC (initial 25 IU FIX/kg at INR 4) rather than plasma (1B)", lab:"INR", after:"Bleeding on VKA: 4F-PCC 25–50 IU/kg + vitamin K 5–10 mg IV (1B); plasma 15–20 ml/kg + vitamin K if PCC unavailable (1C)", grade:"1B" }
+        ] },
+
+      { group:"Direct oral anticoagulants", name:"Direct Xa inhibitors", agents:"rivaroxaban · apixaban · edoxaban", brands:"Xarelto Eliquis Lixiana",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C", hours:{before:24, after:6, dayBefore:true} },
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake to surgery, provided CrCl > 30 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full therapeutic dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, after:72, severeLab:true},
+            renal:{severe:"CrCl < 30: outside the 3-day recommendation — individualise (drug level / longer interval; see Regional tab for assay targets)"},
+            notes:"Severe bleeding on a Xa inhibitor: PCC 25 IU/kg initially, suggested over andexanet alpha (2C)." }
+        ] },
+
+      { group:"Direct oral anticoagulants", name:"Dabigatran", agents:"110–150 mg bd", brands:"Pradaxa",
+        doses:[
+          { label:"Low-bleeding-risk procedure", before:"Can be given up to the day before surgery", lab:"", after:"Restart about 6 h after the procedure once haemostasis is achieved, without LMWH", grade:"2C", hours:{before:24, after:6, dayBefore:true} },
+          { label:"Intermediate / high-bleeding-risk procedure", before:"3 days from last intake if CrCl > 50 ml/min. No bridging", lab:"No routine testing", after:"Prophylactic-dose LMWH or DOAC post-op if indicated, then full dose up to 72 h post-op once haemostasis is achieved", grade:"1C / 2C", hours:{before:72, mod:120, after:72, severeLab:true},
+            renal:{mod:"CrCl 30–50: 5 days from last intake", severe:"CrCl < 30: outside the recommendation (dabigatran generally contraindicated) — individualise"},
+            notes:"Severe bleeding on dabigatran: idarucizumab could be considered (2C)." }
+        ] },
+
+      { group:"Heparins", name:"UFH / LMWH / fondaparinux", agents:"", brands:"Clexane Fragmin Innohep Fraxiparine Arixtra Heparin",
+        doses:[{ label:"Interruption before surgery", before:"The ESAIC 2023 bleeding guideline gives no specific pre-operative interruption interval for heparins or fondaparinux. For a practical minimum see the pharmacokinetic intervals on the Regional tab (LMWH low 12 h / high 24 h; UFH IV 6 h / SC 12 h; fondaparinux 36 h) and your local protocol", lab:"Anti-Xa (LMWH, fondaparinux) · aPTT / anti-Xa / ACT (UFH)", after:"Per VTE-prophylaxis or therapeutic indication once haemostasis is secured", grade:"—",
+          notes:"Reversal of severe bleeding: IV UFH — protamine 1 mg per 100 IU given in the previous 2–3 h (1A). LMWH — protamine 1 mg per 100 anti-Xa IU (2C). Fondaparinux — rFVIIa off-label could be considered (2C)." }] }
+    ]
+  },
+
+  /* ---- Tab: DOAC dose definitions (2022, Table 1) ---- */
+  doseTable: {
+    note:"Low vs high dose is defined by regimen, not by indication alone; ‘low’ = twice the half-life interval, ‘high’ = 4–5 half-lives. Doses from the Summary of Product Characteristics as reproduced in Table 1 of the guideline.",
+    rows:[
+      ["VTE prophylaxis after hip/knee replacement","low","10 mg od","2.5 mg bd","—","220 mg od (150 mg od if CrCl 30–50, age ≥ 75, verapamil/amiodarone/quinidine)"],
+      ["Stroke prevention in non-valvular AF","high","20 mg od (15 mg if CrCl 15–50)","5 mg bd (2.5 mg bd if 2 of: age ≥ 80, weight ≤ 60 kg, creatinine ≥ 133 µmol/l; or CrCl 15–29)","60 mg od (30 mg if CrCl 15–50, weight ≤ 60 kg, or ciclosporin/dronedarone/erythromycin/ketoconazole)","150 mg bd (110 mg bd if age ≥ 80 or verapamil; 110/150 bd if CrCl 30–50 or age 75–80)"],
+      ["Acute VTE treatment","high","15 mg bd × 21 d then 20 mg od (15 mg od if CrCl 15–50)","10 mg bd × 7 d then 5 mg bd","60 mg od (30 mg as above)","150 mg bd (110 mg bd as above)"],
+      ["Extended prevention of recurrent VTE","low","10 mg od or 20 mg od","2.5 mg bd","—","—"],
+      ["Acute coronary syndrome","low","2.5 mg bd","—","—","—"],
+      ["Symptomatic peripheral artery disease","low","2.5 mg bd","—","—","—"]
+    ]
+  }
+};
+
+/* ============================================================
+   APP — no need to edit unless changing behaviour
+   ============================================================ */
+const state = { tab:"regional", block:"high", blockName:"", proc:"high", renal:"normal", q:"",
+                plan:{ mode:"regional", drugs:[], when:"", catheter:false } };
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?"":s).replace(/&(?!\w+;)/g,"&amp;").replace(/</g,"&lt;");
+const RENAL_LABEL = { normal:"CrCl > 50", mod:"CrCl 30–50", severe:"CrCl < 30" };
+
+/* ---------- shared pieces ---------- */
+function cell(label, val, cls, main){
+  const inner = val ? `<div class="val ${cls||""}">${val}</div>` : `<p>—</p>`;
+  return `<div class="cell ${main?"main":""}"><div class="lbl">${label}</div>${inner}</div>`;
+}
+function renalBox(r){
+  if(!r) return "";
+  return ["mod","severe"].filter(k=>r[k]).map(k=>`<div class="renal ${state.renal===k?"active":""}">${r[k]}</div>`).join("");
+}
+function doseRow(d, flag){
+  return `<div class="dose">
+    <h4>${esc(d.label)} ${d.grade?`<span class="grade">${esc(d.grade)}</span>`:""}</h4>
+    <div class="cols">
+      ${cell("Last dose → procedure", d.before, flag, true)}
+      ${cell("Procedure → next dose", d.after)}
+      ${cell("Lab target", d.lab)}
+    </div>
+    ${renalBox(d.renal)}
+    ${d.notes?`<p class="extra">${d.notes}</p>`:""}
+  </div>`;
+}
+function hay(d){ return (d.name+" "+d.agents+" "+d.group+" "+(d.brands||"")+" "+d.doses.map(x=>x.label).join(" ")).toLowerCase(); }
+function matches(d){ return !state.q || hay(d).includes(state.q); }
+function rules(items, title){
+  return `<details class="rules"><summary>${title}</summary><ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul></details>`;
+}
+function short(v){ v = v.replace(/\s*\(.*?\)/g,""); const cut = v.split(/[—·,.;]/)[0].trim(); return cut.length>34 ? cut.slice(0,32)+"…" : cut; }
+function quick(row){
+  let v = row.before, l = "last dose → procedure";
+  if(state.renal!=="normal" && row.renal && row.renal[state.renal]){ v = row.renal[state.renal]; l = RENAL_LABEL[state.renal]+" · adjusted"; }
+  return { v: short(v), l };
+}
+function pickSurgicalRow(d){
+  const want = state.proc==="low" ? /low-bleeding/i : /intermediate|withdrawal is decided|INR < 1\.5|clopidogrel|interruption before/i;
+  return d.doses.find(x=>want.test(x.label)) || d.doses[0];
+}
+function renderList(drugs, rowFn){
+  const groups = [...new Set(drugs.map(d=>d.group))];
+  let html = "", any = false;
+  for(const g of groups){
+    const items = drugs.filter(d=>d.group===g && matches(d));
+    if(!items.length) continue;
+    any = true;
+    html += `<div class="group-h">${esc(g)}</div>`;
+    for(const d of items){
+      const q = quick(rowFn(d));
+      html += `<details class="drug" ${state.q?"open":""}>
+        <summary>
+          <span class="name">${esc(d.name)}</span>
+          <span class="agents">${esc(d.agents)}${d.brands?` <span class="brands">· ${esc(d.brands.replace(/ /g,", "))}</span>`:""}</span>
+          <span class="quick ${d.flag||""}">${q.v}<small>${q.l}</small></span>
+        </summary>
+        <div class="body">${d.doses.map(x=>doseRow(x, d.flag)).join("")}${d.notes?`<p class="extra">${d.notes}</p>`:""}</div>
+      </details>`;
+    }
+  }
+  return any ? html : `<p class="empty">No drug matches “${esc(state.q)}”.<br>Try the generic or brand name.</p>`;
+}
+
+/* ---------- block picker (Table 2) ---------- */
+function blockPicker(){
+  const opts = DATA.blocks.map(r=>`<optgroup label="${esc(r.region)}">${r.items.map(([n,c,v])=>`<option value="${esc(n)}|${c}" ${state.blockName===n?"selected":""}>${esc(n)} — ${c==="deep"?"deep / neuraxial":"superficial"}${v?" *":""}</option>`).join("")}</optgroup>`).join("");
+  return `<div class="picker"><label for="blockSel">Find your block (Table 2)</label>
+    <select id="blockSel"><option value="">— choose a block to set the category —</option>${opts}</select>
+    <small>* column assignment unclear in the extracted PDF text — verify against the printed Table 2. The list is neither definitive nor absolute; institutional categorisation may differ.</small></div>`;
+}
+
+/* ---------- planner ---------- */
+function plannerDrugOptions(){
+  const src = state.plan.mode==="regional" ? DATA.regional.drugs : DATA.surgical.drugs;
+  const out = [];
+  src.forEach((d,di)=>d.doses.forEach((x,xi)=>{ if(x.hours) out.push({ id:`${di}.${xi}`, label:`${d.name} — ${x.label}`, drug:d, dose:x }); }));
+  return out;
+}
+function fmt(dt){ return dt.toLocaleString("en-GB",{weekday:"short", day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit"}); }
+function hrs(h){ return h>=48 && h%24===0 ? `${h/24} days` : `${h} h`; }
+function computePlan(){
+  const P = state.plan;
+  const opts = plannerDrugOptions();
+  const chosen = P.drugs.map(id=>opts.find(o=>o.id===id)).filter(Boolean);
+  if(!chosen.length) return `<p class="note">Select one or more drugs. With a combination, the longest interval applies (R19).</p>`;
+  const when = P.when ? new Date(P.when) : null;
+  let rows = "", maxBefore = 0, maxAfter = 0, flags = [];
+  for(const c of chosen){
+    const h = c.dose.hours;
+    let before = h.before, lab = !!h.labRequired, note = "";
+    if(state.renal==="mod" && h.mod!=null) { before = h.mod; note = RENAL_LABEL.mod; }
+    if(state.renal==="severe" && h.severe!=null) { before = h.severe; note = RENAL_LABEL.severe; }
+    if((state.renal==="mod" && h.modLab) || (state.renal==="severe" && h.severeLab)) { lab = true; note = RENAL_LABEL[state.renal]+" — laboratory target required, the fixed interval does not apply"; }
+    if(P.mode==="regional" && state.block==="low" && !h.notRecommended){ before = 0; note = "Superficial block — zero interval if within/below individual therapeutic range (Table 4)"; }
+    if(h.continue) note = "Continue — do not interrupt";
+    if(h.notRecommended) flags.push(`${c.drug.name}: neuraxial / deep procedures not recommended (1C).`);
+    if(P.mode==="regional" && state.block==="high" && /P2Y12/.test(c.drug.name)) flags.push("P2Y12 inhibitor: deep blocks are contraindicated (R18) — interval shown is for neuraxial after withdrawal.");
+    let after = h.after; if(P.mode==="regional" && state.block==="low") after = 0;
+    if(P.catheter && P.mode==="regional" && (/VKA|DOAC|Xa|Dabigatran|high dose|P2Y12/i.test(c.drug.name+c.dose.label))) flags.push(`${c.drug.name}: not to be given with a neuraxial catheter in situ — next dose only after catheter removal (bridge with low-dose LMWH/UFH).`);
+    maxBefore = Math.max(maxBefore, before||0); if(after!=null) maxAfter = Math.max(maxAfter, after);
+    const range = h.beforeMax ? ` (up to ${hrs(h.beforeMax)})` : "";
+    rows += `<tr><td><strong>${esc(c.drug.name)}</strong><br><small>${esc(c.dose.label)}</small></td>
+      <td>${h.continue?"continue":hrs(before)+range}${lab?" <span class=\"grade\">lab target</span>":""}${h.dayBefore?"<br><small>last dose the day before</small>":""}<br><small>${esc(note)}</small></td>
+      <td>${after==null?"per guidance":(after===0?"routine / no delay":"≥ "+hrs(after))}${h.afterMax?` – ${hrs(h.afterMax)}`:""}${h.afterAlt?`<br><small>${esc(h.afterAlt)}</small>`:""}</td></tr>`;
+  }
+  let summary = "";
+  if(when){
+    const last = new Date(when.getTime() - maxBefore*3600e3);
+    const next = new Date(when.getTime() + maxAfter*3600e3);
+    summary = `<div class="plan-out">
+      <div class="po"><div class="lbl">Last dose no later than</div><div class="big">${fmt(last)}</div><small>${hrs(maxBefore)} before the procedure${chosen.length>1?" (longest interval of the combination)":""}</small></div>
+      <div class="po mid"><div class="lbl">Procedure</div><div class="big">${fmt(when)}</div></div>
+      <div class="po"><div class="lbl">Earliest next dose</div><div class="big">${maxAfter===0?"routine time":fmt(next)}</div><small>${maxAfter===0?"":hrs(maxAfter)+" after, once haemostasis is secured"}</small></div>
+    </div>`;
+  } else summary = `<p class="note">Enter the procedure date and time to get calendar times.</p>`;
+  return summary +
+    `<div class="scroll"><table class="ref"><tr><th>Drug</th><th>Last dose → procedure</th><th>Procedure → next dose</th></tr>${rows}</table></div>` +
+    (flags.length?`<div class="warn">${flags.map(f=>`<p>⚠ ${f}</p>`).join("")}</div>`:"") +
+    `<p class="note">Intervals are minimums from the guideline tables; laboratory targets, bloody tap, renal function and thrombotic risk may lengthen or shorten them. ${P.mode==="regional"?"Applies equally to needle insertion, catheter insertion and catheter removal (R36).":"Resumption requires adequate surgical haemostasis."}</p>
+     <button class="btn" id="copyPlan">Copy summary</button>`;
+}
+function renderPlanner(){
+  const P = state.plan;
+  const opts = plannerDrugOptions();
+  $("#panel-planner").innerHTML = `
+    <div class="plan-form">
+      <div class="chips" style="padding-top:0">
+        <span class="lbl">Scenario</span>
+        <button data-pk="mode" data-v="regional" aria-pressed="${P.mode==="regional"}">Neuraxial / nerve block</button>
+        <button data-pk="mode" data-v="surgical" aria-pressed="${P.mode==="surgical"}">Surgery</button>
+      </div>
+      ${P.mode==="regional" ? `<div class="chips" style="padding-top:0"><span class="lbl">Block</span>
+        <button data-pk="block" data-v="high" aria-pressed="${state.block==="high"}">Neuraxial / deep</button>
+        <button data-pk="block" data-v="low" aria-pressed="${state.block==="low"}">Superficial</button>
+        <span class="sep"></span><button data-pk="catheter" data-v="toggle" aria-pressed="${P.catheter}">Catheter will stay in</button></div>`
+      : `<div class="chips" style="padding-top:0"><span class="lbl">Procedure risk</span>
+        <button data-pk="proc" data-v="low" aria-pressed="${state.proc==="low"}">Low bleeding</button>
+        <button data-pk="proc" data-v="high" aria-pressed="${state.proc==="high"}">Intermediate / high</button></div>`}
+      <div class="chips" style="padding-top:0"><span class="lbl">CrCl</span>
+        <button data-pk="renal" data-v="normal" aria-pressed="${state.renal==="normal"}">&gt; 50</button>
+        <button data-pk="renal" data-v="mod" aria-pressed="${state.renal==="mod"}">30–50</button>
+        <button data-pk="renal" data-v="severe" aria-pressed="${state.renal==="severe"}">&lt; 30</button></div>
+      <label class="fl">Drug(s) — tap to add
+        <div class="drugchips">${opts.filter(o => P.mode!=="surgical" || (state.proc==="low" ? !/intermediate|withdrawal|INR/i.test(o.dose.label) : !/low-bleeding/i.test(o.dose.label))).map(o=>`<button data-drug="${o.id}" aria-pressed="${P.drugs.includes(o.id)}">${esc(o.label)}</button>`).join("")}</div>
+      </label>
+      <label class="fl">Procedure date &amp; time <input type="datetime-local" id="planWhen" value="${esc(P.when)}"></label>
+    </div>
+    <div id="planOut">${computePlan()}</div>`;
+  $("#panel-planner").querySelectorAll("[data-pk]").forEach(b=>b.addEventListener("click",()=>{
+    const k=b.dataset.pk, v=b.dataset.v;
+    if(k==="mode"){ P.mode=v; P.drugs=[]; } else if(k==="catheter"){ P.catheter=!P.catheter; } else state[k]=v;
+    syncChips(); renderPlanner();
+  }));
+  $("#panel-planner").querySelectorAll("[data-drug]").forEach(b=>b.addEventListener("click",()=>{
+    const id=b.dataset.drug; P.drugs = P.drugs.includes(id) ? P.drugs.filter(x=>x!==id) : [...P.drugs,id]; renderPlanner();
+  }));
+  $("#planWhen").addEventListener("change", e=>{ P.when=e.target.value; $("#planOut").innerHTML=computePlan(); bindCopy(); });
+  bindCopy();
+}
+function bindCopy(){
+  const b=$("#copyPlan"); if(!b) return;
+  b.addEventListener("click", async ()=>{
+    const t = $("#planOut").innerText.replace(/\n{3,}/g,"\n\n");
+    try{ if(navigator.share){ await navigator.share({title:"Antithrombotic timing", text:t}); } else { await navigator.clipboard.writeText(t); b.textContent="Copied"; } }catch(e){}
+  });
+}
+
+/* ---------- main render ---------- */
+function syncChips(){
+  document.querySelectorAll('.top .chips button[data-k]').forEach(b=>{
+    const k=b.dataset.k; b.setAttribute("aria-pressed", String(state[k]===b.dataset.v));
+  });
+}
+function render(){
+  for(const t of ["regional","surgical","planner","ref"]){
+    $(`#tab-${t}`).setAttribute("aria-selected", state.tab===t);
+    $(`#panel-${t}`).classList.toggle("hidden", state.tab!==t);
+  }
+  $("#chips-regional").classList.toggle("hidden", state.tab!=="regional");
+  $("#chips-surgical").classList.toggle("hidden", state.tab!=="surgical");
+  $("#searchBox").classList.toggle("hidden", state.tab==="ref" || state.tab==="planner");
+  $("#srcLabel").textContent = state.tab==="surgical" ? "ESAIC 2023" : state.tab==="ref" ? "ESAIC/ESRA 2022 · Table 1" : state.tab==="planner" ? "Planner" : "ESAIC/ESRA 2022";
+  $("#banner").textContent = DATA.disclaimer;
+  syncChips();
+
+  if(state.tab==="regional"){
+    const R = DATA.regional;
+    if(state.block==="high"){
+      $("#panel-regional").innerHTML = blockPicker() + rules(R.generalHigh, "Key rules for neuraxial & deep blocks") + renderList(R.drugs, d=>d.doses[0]);
+    } else {
+      $("#panel-regional").innerHTML = blockPicker() + rules(R.generalLow, "Key rules for superficial blocks") +
+        `<div class="scroll"><table class="ref">
+           <tr><th>Drug</th><th>Last dose → block</th><th>Block → next dose</th><th>Lab target</th></tr>
+           <tr><td>DOACs (any dose), LMWH low, UFH low, fondaparinux low, aspirin low</td><td><strong style="color:var(--ok)">Zero</strong></td><td>Routinely prescribed next time point</td><td>No testing (consider a level if accumulation suspected)</td></tr>
+           <tr><td>VKA, LMWH high, UFH high, aspirin high, P2Y12 inhibitors, drug combinations</td><td><strong style="color:var(--ok)">Zero</strong> if within or below the patient's individual therapeutic range</td><td>Routinely prescribed next time point</td><td>Within or below the individual therapeutic range (not defined for DOACs)</td></tr>
+         </table></div>`;
+    }
+    const sel = $("#blockSel"); if(sel) sel.addEventListener("change", e=>{
+      const [n,c] = e.target.value.split("|"); state.blockName = n||""; if(c){ state.block = c==="deep"?"high":"low"; } render();
+    });
+  }
+  if(state.tab==="surgical"){
+    const S = DATA.surgical;
+    $("#panel-surgical").innerHTML = rules(S.general, "Key rules for surgical interruption") +
+      `<p class="note">Summary shows the ${state.proc==="low"?"low":"intermediate / high"} bleeding-risk row. Open a drug for every scenario.</p>` +
+      renderList(S.drugs, pickSurgicalRow);
+  }
+  if(state.tab==="planner") renderPlanner();
+  if(state.tab==="ref"){
+    const T = DATA.doseTable;
+    $("#panel-ref").innerHTML =
+      `<p class="note">${T.note}</p>
+       <div class="scroll"><table class="ref">
+         <tr><th>Indication</th><th>Category</th><th>Rivaroxaban</th><th>Apixaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>
+         ${T.rows.map(r=>`<tr><td>${r[0]}</td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`).join("")}
+       </table></div>
+       <h3 style="margin-top:24px;font-size:1rem">Other dose thresholds</h3>
+       <ul class="note">
+         <li>LMWH: low ≤ 50 IU anti-Xa/kg/day (enoxaparin 40 mg, dalteparin 5000 IU, nadroparin 5700 IU, tinzaparin 4500 IU per day); high = above.</li>
+         <li>UFH: low ≤ 200 IU/kg/day SC or ≤ 100 IU/kg/day IV; high = above.</li>
+         <li>Fondaparinux: low 2.5 mg/day; high 5–10 mg/day.</li>
+         <li>Aspirin: low &lt; 200 mg/day; high ≥ 200 mg/day.</li>
+       </ul>`;
+  }
+  $("#footer").innerHTML = `<p><strong>Sources</strong></p>` +
+    DATA.sources.map(s=>`<p>${esc(s.key)} — ${esc(s.text)} <a href="${s.url}" target="_blank" rel="noopener">link</a></p>`).join("") +
+    `<p>Data version ${esc(DATA.version)} · ${esc(DATA.editor)}${DATA.issuesUrl?` · <a href="${DATA.issuesUrl}" target="_blank" rel="noopener">Report an error</a>`:""}</p>`;
+}
+
+document.querySelectorAll(".top .chips").forEach(c=>c.addEventListener("click", e=>{
+  const b = e.target.closest("button[data-k]"); if(!b) return;
+  state[b.dataset.k] = b.dataset.v; if(b.dataset.k==="block") state.blockName=""; render();
+}));
+document.querySelectorAll('[role="tab"]').forEach(t=>t.addEventListener("click",()=>{ state.tab = t.id.replace("tab-",""); render(); window.scrollTo({top:0}); }));
+const qi = $("#q");
+qi.addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); $("#searchBox").classList.toggle("has", !!state.q); render(); });
+$("#clear").addEventListener("click", ()=>{ qi.value=""; state.q=""; $("#searchBox").classList.remove("has"); render(); qi.focus(); });
+render();
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(reg=>{ reg.update(); setInterval(()=>reg.update(), 60*60*1000); }).catch(()=>{});
+  // Reload once when a new version has taken over, so updates appear immediately.
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener("controllerchange", ()=>{ if(navigator.serviceWorker.controller && !reloaded){ reloaded=true; location.reload(); } });
+}
+</script>
+</body>
+</html>
