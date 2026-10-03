@@ -38,4 +38,4 @@ The repository also contains `manifest.json`, `sw.js` and the icons, which make 
 - **iPhone (Safari):** open the GitHub Pages link → Share → *Add to Home Screen* → Add.
 - **Android (Chrome):** open the link → menu (⋮) → *Add to Home screen* / *Install app*.
 
-The app checks for a new version every time it is opened with internet and reloads itself automatically; you do not need to edit `sw.js` after changing files.
+When a new version is online, the app shows an “Update” button; tap it to load the new version. You do not need to edit `sw.js` after changing files.
