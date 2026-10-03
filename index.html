@@ -16,9 +16,9 @@
    THEME — change colours here
    ============================================================ */
 :root{
-  --bg:#FFFFFF; --paper:#FFFFFF; --soft:#F3F5F9; --ink:#111827; --muted:#4B5563; --line:#D9DEE7;
-  --blue:#1E3A8A; --blue-soft:#E8EDF8; --amber:#9A6A0F; --amber-soft:#FBF1D8;
-  --red:#A8281F; --ok:#2E6B3A; --radius:14px; --w:1040px; --tap:46px;
+  --bg:#FFFFFF; --paper:#FFFFFF; --soft:#F7F7F8; --ink:#1F2937; --muted:#6B7280; --line:#ECECEF;
+  --blue:#B91C1C; --blue-soft:#FDECEC; --amber:#B45309; --amber-soft:#FEF3E2;
+  --red:#B91C1C; --red-soft:#FDECEC; --ok:#15803D; --ok-soft:#E8F5EC; --radius:12px; --w:1040px; --tap:46px;
   --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
   box-sizing:border-box;
 }
@@ -30,12 +30,12 @@ button{font:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 
 /* sticky top: title + search + chips */
-.top{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(var(--sat) + 10px) 14px 10px}
+.top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line);padding:calc(var(--sat) + 10px) 14px 8px}
 .top .in{max-width:var(--w);margin:0 auto}
 .titlerow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.titlerow h1{font-size:1.15rem;margin:0;flex:1;letter-spacing:-.01em}
+.titlerow h1{font-size:1.05rem;margin:0;flex:1;letter-spacing:-.01em;font-weight:600}
 .titlerow .src{font-size:.78rem;color:var(--muted);white-space:nowrap}
-.search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:0 12px;height:var(--tap)}
+.search{display:flex;align-items:center;gap:8px;background:var(--soft);border:0;border-radius:12px;padding:0 12px;height:42px}
 .search svg{flex:none;width:20px;height:20px;color:var(--muted)}
 .search input{flex:1;border:0;background:none;font:inherit;color:var(--ink);min-width:0;height:100%}
 .search input:focus{outline:none}
@@ -45,54 +45,50 @@ button{font:inherit;cursor:pointer}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .chips::-webkit-scrollbar{display:none}
 .chips .lbl{flex:none;align-self:center;font-size:.82rem;color:var(--muted);padding-right:2px}
-.chips button{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font-size:.92rem;font-weight:600}
-.chips button[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.chips button{flex:none;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--muted);font-size:.86rem;font-weight:500}
+.chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .chips .sep{flex:none;width:1px;background:var(--line);margin:4px 4px}
 
 /* tabs: top on desktop, bottom bar on phone */
-.tabs{display:flex;gap:4px;max-width:var(--w);margin:0 auto;border-bottom:2px solid var(--line)}
+.tabs{display:none!important;gap:4px;max-width:var(--w);margin:0 auto;border-bottom:2px solid var(--line)}
 .tabs button{flex:1;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:10px 6px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.9rem}
 .tabs button svg{width:22px;height:22px}
 .tabs button[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue)}
 @media (max-width:720px){
   .tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--paper);border-top:1px solid var(--line);border-bottom:0;padding:6px 6px calc(var(--sab) + 6px);margin:0}
   .tabs button{border-bottom:0;margin:0;border-radius:10px;padding:6px 4px;font-size:.78rem}
-  .tabs button[aria-selected="true"]{background:var(--blue-soft)}
+  .tabs button[aria-selected="true"]{background:none;color:var(--blue)}
   body{padding-bottom:calc(var(--sab) + 78px)}
 }
 
 .wrap{max-width:var(--w);margin:0 auto;padding:14px 14px 40px}
 
-.rules{background:var(--blue-soft);border-radius:var(--radius);margin:0 0 14px;overflow:hidden}
-.rules summary{list-style:none;cursor:pointer;padding:12px 14px;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:8px;min-height:var(--tap)}
+.rules{background:none;border-radius:0;margin:0 0 4px;overflow:hidden;border-bottom:1px solid var(--line)}
+.rules summary{list-style:none;cursor:pointer;padding:10px 4px;font-weight:500;font-size:.88rem;color:var(--muted);display:flex;align-items:center;gap:8px;min-height:40px}
 .rules summary::-webkit-details-marker{display:none}
-.rules summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg);transition:transform .15s}
+.rules summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);transition:transform .15s}
 .rules[open] summary::after{transform:rotate(-135deg)}
 .rules ul{margin:0;padding:0 14px 12px 30px;font-size:.92rem;color:var(--ink)}
 .rules li{margin:5px 0}
 
-.banner{font-size:.85rem;color:var(--muted);margin:0 0 14px;padding:0 2px}
+.banner{display:none}
 
-.group-h{font-size:.82rem;font-weight:700;color:var(--muted);margin:18px 2px 8px}
+.group-h{font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 4px 4px}
 
 /* drug card */
-.drug{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
-.drug summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;min-height:64px}
-.badge{display:inline-flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:92px;max-width:48vw;padding:7px 12px;border-radius:12px;font-weight:800;font-size:1.05rem;line-height:1.15;text-align:right}
-.badge small{font-weight:500;font-size:.7rem;opacity:.85}
-.badge.b0{background:var(--ok-soft);color:var(--ok)}
-.badge.b1{background:var(--amber-soft);color:var(--amber)}
-.badge.b2{background:var(--blue-soft);color:var(--blue)}
-.badge.b3{background:var(--red-soft);color:var(--red)}
-.drug summary .hint{grid-column:1;font-size:.74rem;color:var(--muted)}
-.drug[open] summary .hint{display:none}
+.drug{background:var(--paper);border:0;border-bottom:1px solid var(--line);border-radius:0;margin:0}
+.drug summary{list-style:none;cursor:pointer;padding:14px 4px;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;min-height:60px}
+.badge{display:inline-flex;flex-direction:column;align-items:flex-end;justify-content:center;max-width:46vw;font-weight:800;font-size:1.15rem;letter-spacing:-.01em;line-height:1.1;text-align:right}
+.badge small{font-weight:500;font-size:.68rem;color:var(--muted);letter-spacing:0}
+.badge.b0{color:var(--ok)} .badge.b1{color:var(--amber)} .badge.b2{color:#1D4ED8} .badge.b3{color:var(--red)}
+.drug summary .hint{display:none}
 .drug summary::-webkit-details-marker{display:none}
-.drug .name{font-weight:700;font-size:1.02rem;grid-column:1}
+.drug .name{font-weight:600;font-size:1rem;grid-column:1}
 .drug .agents{color:var(--muted);font-size:.84rem;grid-column:1;line-height:1.3;display:none}
 .drug[open] .agents{display:block}
 .drug .quick{grid-column:2;grid-row:1/4}
-.drug[open] summary{border-bottom:1px solid var(--line);background:var(--soft)}
-.drug .body{padding:4px 14px 12px}
+.drug[open] summary{background:none}
+.drug .body{padding:0 4px 14px}
 
 .dose{padding:12px 0;border-top:1px dashed var(--line)}
 .dose:first-child{border-top:0}
@@ -100,8 +96,8 @@ button{font:inherit;cursor:pointer}
 .grade{font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--blue-soft);color:var(--blue)}
 .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 @media (max-width:720px){.cols{grid-template-columns:1fr}}
-.cell{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:.93rem;border-left:4px solid var(--line)}
-.cell.main{border-left-color:var(--blue)}
+.cell{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:.92rem;border-left:0}
+.cell.main{background:var(--blue-soft)}
 .cell .lbl{font-size:.76rem;color:var(--muted);margin-bottom:3px}
 .cell .val{font-weight:700;font-size:1.02rem;color:var(--ink)}
 .cell.main .val{color:var(--blue);font-size:1.1rem}
@@ -164,21 +160,49 @@ footer p{margin:6px 0}
 .sel button::after{content:' ✕';opacity:.8}
 .plan-table td:first-child{min-width:120px}
 .b0t{color:var(--ok)} .b1t{color:var(--amber)} .b2t{color:var(--blue)} .b3t{color:var(--red)}
+
+/* ---- ASRA-Coags-style screens ---- */
+.iconbtn{background:none;border:0;font-size:1.9rem;line-height:1;color:var(--blue);padding:0 8px 4px 0;font-weight:600}
+.home{display:grid;gap:10px;margin-top:8px}
+.home a{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink);min-height:72px}
+.home a .ic{width:42px;height:42px;border-radius:12px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;flex:none}
+.home a .ic svg{width:24px;height:24px}
+.home a .t{font-weight:700;font-size:1.02rem}
+.home a .s{font-size:.82rem;color:var(--muted);margin-top:2px}
+.home a::after{content:"›";margin-left:auto;color:var(--muted);font-size:1.5rem}
+.pub{font-size:.78rem;color:var(--muted);text-align:center;margin:18px 0 0}
+.list .row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:14px 4px;border-bottom:1px solid var(--line);cursor:pointer;min-height:60px}
+.list .row .n{font-weight:600}
+.list .row .a{font-size:.8rem;color:var(--muted);margin-top:2px}
+.list .row .chev{color:var(--muted);font-size:1.4rem}
+.det h2{font-size:1.3rem;margin:14px 0 2px;letter-spacing:-.01em}
+.det .agents{color:var(--muted);font-size:.9rem;margin:0 0 14px}
+.det .scen{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none}
+.det .scen button{flex:none;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 14px;font-size:.88rem;color:var(--muted)}
+.det .scen button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.big{background:var(--soft);border-radius:14px;padding:16px;margin-bottom:10px}
+.big .lbl{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.big .v{font-weight:800;font-size:1.5rem;line-height:1.15;letter-spacing:-.01em}
+.big .v.b0{color:var(--ok)} .big .v.b1{color:var(--amber)} .big .v.b2{color:#1D4ED8} .big .v.b3{color:var(--red)}
+.big p{margin:6px 0 0;font-size:.9rem;color:var(--ink)}
+.sect{margin-top:16px}
+.sect h4{font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.sect p{margin:0;font-size:.92rem}
 </style>
 </head>
 <body>
-
 <div class="top"><div class="in">
   <div class="titlerow">
-    <h1>Perioperative Medication Management</h1>
-    <span class="src" id="srcLabel">ESAIC/ESRA 2022</span>
+    <button id="back" class="iconbtn hidden" aria-label="Back">‹</button>
+    <h1 id="title">Perioperative Medication Management</h1>
+    <span class="src" id="srcLabel"></span>
   </div>
-  <div class="search" id="searchBox">
+  <div class="search hidden" id="searchBox">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    <input id="q" type="search" placeholder="Search drug (apixaban, enoxaparin, clopidogrel…)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input id="q" type="search" placeholder="Search drug or brand name" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <button id="clear" aria-label="Clear search">✕</button>
   </div>
-  <div class="chips" id="chips-regional">
+  <div class="chips hidden" id="chips-regional">
     <span class="lbl">Block</span>
     <button data-k="block" data-v="high" aria-pressed="true">Neuraxial / deep</button>
     <button data-k="block" data-v="low" aria-pressed="false">Superficial</button>
@@ -189,8 +213,8 @@ footer p{margin:6px 0}
     <button data-k="renal" data-v="severe" aria-pressed="false">&lt; 30</button>
   </div>
   <div class="chips hidden" id="chips-surgical">
-    <span class="lbl">Procedure risk</span>
-    <button data-k="proc" data-v="low" aria-pressed="false">Low bleeding</button>
+    <span class="lbl">Bleeding risk</span>
+    <button data-k="proc" data-v="low" aria-pressed="false">Low</button>
     <button data-k="proc" data-v="high" aria-pressed="true">Intermediate / high</button>
     <span class="sep"></span>
     <span class="lbl">CrCl</span>
@@ -200,25 +224,22 @@ footer p{margin:6px 0}
   </div>
 </div></div>
 
-<nav class="tabs" role="tablist">
-  <button role="tab" id="tab-regional" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M7 7l5-4 5 4M7 17l5 4 5-4"/></svg>Regional</button>
-  <button role="tab" id="tab-surgical" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 18 6l2 2L6 22H4zM14 10l-2-2 2-2 2 2"/></svg>Surgery</button>
-  <button role="tab" id="tab-other" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3h4l1 4h4l-2 4 2 4h-4l-1 4h-4l-1-4H5l2-4-2-4h4z"/></svg>Other meds</button>
-  <button role="tab" id="tab-planner" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>Planner</button>
-  <button role="tab" id="tab-ref" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Tables</button>
+<nav class="tabs hidden" role="tablist">
+  <button role="tab" id="tab-regional"></button><button role="tab" id="tab-surgical"></button><button role="tab" id="tab-other"></button><button role="tab" id="tab-planner"></button><button role="tab" id="tab-ref"></button>
 </nav>
 
 <div id="updBar" role="status"><span>Updating to the latest version…</span></div>
 <main class="wrap">
   <p class="banner" id="banner"></p>
-  <section id="panel-regional" role="tabpanel"></section>
-  <section id="panel-surgical" role="tabpanel" class="hidden"></section>
-  <section id="panel-other" role="tabpanel" class="hidden"></section>
-  <section id="panel-planner" role="tabpanel" class="hidden"></section>
-  <section id="panel-ref" role="tabpanel" class="hidden"></section>
+  <section id="panel-home"></section>
+  <section id="panel-regional" class="hidden"></section>
+  <section id="panel-surgical" class="hidden"></section>
+  <section id="panel-other" class="hidden"></section>
+  <section id="panel-planner" class="hidden"></section>
+  <section id="panel-ref" class="hidden"></section>
+  <section id="panel-detail" class="hidden"></section>
   <footer id="footer"></footer>
 </main>
-
 <script>
 /* ============================================================
    DATA — the only block you normally need to edit.
@@ -226,7 +247,7 @@ footer p{margin:6px 0}
    time-based, see text). brands = trade names for search.
    ============================================================ */
 const DATA = {
-  version: "2026-10-03h",
+  version: "2026-10-04a",
   editor: "Orestis Milionis, MD — 2nd Dept of Anaesthesiology, Attikon University Hospital",
   issuesUrl: "https://github.com/orestismilionis/Antithrombotics/issues",
   disclaimer: "Decision support only. Verify against the current guideline text and your institutional protocol and apply individual risk–benefit assessment. Intervals are transcribed from the published tables; they do not replace clinical judgement.",
@@ -793,88 +814,102 @@ function bindCopy(){
   });
 }
 
-/* ---------- main render ---------- */
-function syncChips(){
-  document.querySelectorAll('.top .chips button[data-k]').forEach(b=>{
-    const k=b.dataset.k; b.setAttribute("aria-pressed", String(state[k]===b.dataset.v));
-  });
+/* ---------- main render (screen-based) ---------- */
+state.screen = "home"; state.detail = null;
+const ICON = {
+  regional:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M7 7l5-4 5 4M7 17l5 4 5-4"/></svg>',
+  surgical:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20 18 6l2 2L6 22H4zM14 10l-2-2 2-2 2 2"/></svg>',
+  other:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3h4l1 4h4l-2 4 2 4h-4l-1 4h-4l-1-4H5l2-4-2-4h4z"/></svg>',
+  planner:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>',
+  ref:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>'
+};
+const TITLES = { home:"Perioperative Medication Management", regional:"Regional anaesthesia", surgical:"Surgery", other:"Other medication", planner:"Planner", ref:"Tables", detail:"" };
+function go(screen, detail){ state.screen = screen; state.detail = detail||null; state.q=""; const qi=$("#q"); if(qi) qi.value=""; render(); window.scrollTo({top:0}); }
+function syncChips(){ document.querySelectorAll('.top .chips button[data-k]').forEach(b=>b.setAttribute("aria-pressed", String(state[b.dataset.k]===b.dataset.v))); }
+function listScreen(drugs, rowFn, src){
+  const groups = [...new Set(drugs.map(d=>d.group))];
+  let html = "", any=false;
+  for(const g of groups){
+    const items = drugs.filter(d=>d.group===g && matches(d)); if(!items.length) continue; any=true;
+    html += `<div class="group-h">${esc(g)}</div>`;
+    for(const d of items){
+      const row = rowFn(d), q = quick(row);
+      html += `<div class="row" data-open="${src}:${drugs.indexOf(d)}"><div><div class="n">${esc(d.name)}</div><div class="a">${esc(short(d.agents||""))}</div></div><span class="badge ${badgeClass(row,q.v)}">${q.v}<small>${q.l}</small></span><span class="chev">›</span></div>`;
+    }
+  }
+  return `<div class="list">${any?html:`<p class="empty">No drug matches “${esc(state.q)}”.<br>Try the generic or brand name.</p>`}</div>`;
+}
+function detailScreen(){
+  const [src, idx] = state.detail; const d = DATA[src].drugs[idx];
+  if(state.detailDose==null || state.detailDose>=d.doses.length) state.detailDose = src==="surgical" ? d.doses.indexOf(pickSurgicalRow(d)) : 0;
+  const x = d.doses[state.detailDose];
+  const q = quick(x);
+  const superficial = src==="regional" && state.block==="low";
+  const before = superficial && !(x.hours&&x.hours.notRecommended) ? "0 — no interval (superficial block)" : (state.renal!=="normal" && x.renal && x.renal[state.renal] ? x.renal[state.renal] : x.before);
+  const after  = superficial ? "Routinely prescribed next time point" : x.after;
+  return `<div class="det">
+    <h2>${esc(d.name)}</h2>
+    <p class="agents">${esc(d.agents||"")}${d.brands?` · <span class="brands">${esc(d.brands.replace(/ /g,", "))}</span>`:""}</p>
+    ${d.doses.length>1?`<div class="scen">${d.doses.map((r,i)=>`<button data-dose="${i}" aria-pressed="${i===state.detailDose}">${esc(r.label)}</button>`).join("")}</div>`:`<p class="note">${esc(x.label)}</p>`}
+    <div class="big"><div class="lbl">${src==="regional"?"Last dose → block / catheter removal":"Before surgery"}</div><div class="v ${badgeClass(x, q.v)}">${before||"—"}</div>${x.grade?`<p><span class="grade">${esc(x.grade)}</span>${x.verify?` <span class="grade warnb">verify</span>`:""}</p>`:""}</div>
+    <div class="big"><div class="lbl">${src==="regional"?"Block → next dose":"Restart after surgery"}</div><div class="v">${after||"—"}</div></div>
+    ${x.lab?`<div class="sect"><h4>Laboratory target</h4><p>${x.lab}</p></div>`:""}
+    ${x.renal?`<div class="sect"><h4>Renal adjustment</h4>${["mod","severe"].filter(k=>x.renal[k]).map(k=>`<p class="renal ${state.renal===k?"active":""}">${x.renal[k]}</p>`).join("")}</div>`:""}
+    ${x.asra?`<div class="sect"><h4>International (ASRA 2025 / CHEST 2022)</h4><p>${x.asra}</p></div>`:""}
+    ${x.notes?`<div class="sect"><h4>Notes</h4><p>${x.notes}</p></div>`:""}
+    ${d.notes?`<div class="sect"><h4>Drug class notes</h4><p>${d.notes}</p></div>`:""}
+    <div class="sect"><h4>Source</h4><p>${src==="regional"?"ESAIC/ESRA 2022 (Tables 3–4, R1–R40)":src==="surgical"?"ESAIC 2023 (Table 2, R2)":"see grade"}</p></div>
+  </div>`;
 }
 function render(){
-  for(const t of ["regional","surgical","other","planner","ref"]){
-    $(`#tab-${t}`).setAttribute("aria-selected", state.tab===t);
-    $(`#panel-${t}`).classList.toggle("hidden", state.tab!==t);
-  }
-  $("#chips-regional").classList.toggle("hidden", state.tab!=="regional");
-  $("#chips-surgical").classList.toggle("hidden", state.tab!=="surgical");
-  $("#searchBox").classList.toggle("hidden", state.tab==="ref" || state.tab==="planner");
-  $("#srcLabel").textContent = state.tab==="surgical" ? "ESAIC 2023" : state.tab==="other" ? "ESC 2022 · DGAI 2024 · ESAIC 2018" : state.tab==="ref" ? "Reference tables" : state.tab==="planner" ? "Planner" : "ESAIC/ESRA 2022";
-  $("#banner").textContent = DATA.disclaimer;
+  const s = state.screen;
+  for(const p of ["home","regional","surgical","other","planner","ref","detail"]) $(`#panel-${p}`).classList.toggle("hidden", s!==p);
+  $("#back").classList.toggle("hidden", s==="home");
+  $("#title").textContent = s==="detail" ? TITLES[state.detail[0]] : TITLES[s];
+  const listLike = s==="regional"||s==="surgical"||s==="other";
+  $("#searchBox").classList.toggle("hidden", !listLike);
+  const ctx = s==="detail" ? state.detail[0] : s;
+  $("#chips-regional").classList.toggle("hidden", ctx!=="regional");
+  $("#chips-surgical").classList.toggle("hidden", ctx!=="surgical");
+  $("#srcLabel").textContent = ctx==="regional" ? "ESAIC/ESRA 2022" : ctx==="surgical" ? "ESAIC 2023" : ctx==="other" ? "ESC · DGAI · ESAIC" : "";
   syncChips();
-
-  if(state.tab==="regional"){
+  if(s==="home"){
+    $("#panel-home").innerHTML = `<div class="home">
+      <a href="#" data-go="regional"><span class="ic">${ICON.regional}</span><span><div class="t">Regional anaesthesia</div><div class="s">Neuraxial & nerve blocks — intervals per drug</div></span></a>
+      <a href="#" data-go="surgical"><span class="ic">${ICON.surgical}</span><span><div class="t">Surgery</div><div class="s">Antithrombotic interruption & resumption</div></span></a>
+      <a href="#" data-go="other"><span class="ic">${ICON.other}</span><span><div class="t">Other medication</div><div class="s">Cardiovascular, antidiabetic, endocrine, neuro, psychiatric…</div></span></a>
+      <a href="#" data-go="planner"><span class="ic">${ICON.planner}</span><span><div class="t">Planner</div><div class="s">Enter the patient's drugs → when to stop and restart</div></span></a>
+      <a href="#" data-go="ref"><span class="ic">${ICON.ref}</span><span><div class="t">Tables</div><div class="s">Deep vs superficial blocks · surgical, bleeding & thrombotic risk · DOAC doses</div></span></a>
+    </div><p class="pub">Data version ${esc(DATA.version)} · ESAIC/ESRA 2022 · ESAIC 2023 · ESC 2022 · DGAI 2024 · ASRA 2025 · CHEST 2022</p>`;
+    $("#panel-home").querySelectorAll("[data-go]").forEach(a=>a.addEventListener("click",e=>{ e.preventDefault(); go(a.dataset.go); }));
+  }
+  if(s==="regional"){
     const R = DATA.regional;
-    if(state.block==="high"){
-      $("#panel-regional").innerHTML = blockPicker() + rules(R.generalHigh, "Key rules for neuraxial & deep blocks") + renderList(R.drugs, d=>d.doses[0]);
-    } else {
-      $("#panel-regional").innerHTML = blockPicker() + rules(R.generalLow, "Key rules for superficial blocks") +
-        `<div class="scroll"><table class="ref">
-           <tr><th>Drug</th><th>Last dose → block</th><th>Block → next dose</th><th>Lab target</th></tr>
-           <tr><td>DOACs (any dose), LMWH low, UFH low, fondaparinux low, aspirin low</td><td><strong style="color:var(--ok)">Zero</strong></td><td>Routinely prescribed next time point</td><td>No testing (consider a level if accumulation suspected)</td></tr>
-           <tr><td>VKA, LMWH high, UFH high, aspirin high, P2Y12 inhibitors, drug combinations</td><td><strong style="color:var(--ok)">Zero</strong> if within or below the patient's individual therapeutic range</td><td>Routinely prescribed next time point</td><td>Within or below the individual therapeutic range (not defined for DOACs)</td></tr>
-         </table></div>`;
-    }
-    const sel = $("#blockSel"); if(sel) sel.addEventListener("change", e=>{
-      const [n,c] = e.target.value.split("|"); state.blockName = n||""; if(c){ state.block = c==="deep"?"high":"low"; } render();
-    });
+    $("#panel-regional").innerHTML = (state.block==="high" ? rules(R.generalHigh,"Key rules — neuraxial & deep blocks") : rules(R.generalLow,"Key rules — superficial blocks")) + listScreen(R.drugs, d=>d.doses[0], "regional");
   }
-  if(state.tab==="surgical"){
-    const S = DATA.surgical;
-    $("#panel-surgical").innerHTML = rules(S.general, "Key rules for surgical interruption") +
-      `<p class="note">Summary shows the ${state.proc==="low"?"low":"intermediate / high"} bleeding-risk row. Open a drug for every scenario.</p>` +
-      renderList(S.drugs, pickSurgicalRow);
+  if(s==="surgical"){ const S=DATA.surgical; $("#panel-surgical").innerHTML = rules(S.general,"Key rules — surgical interruption") + listScreen(S.drugs, pickSurgicalRow, "surgical"); }
+  if(s==="other"){ const O=DATA.other; $("#panel-other").innerHTML = rules(O.general,"Key rules — other chronic medication") + listScreen(O.drugs, d=>d.doses[0], "other"); }
+  if(listLike){ $(`#panel-${s}`).querySelectorAll("[data-open]").forEach(r=>r.addEventListener("click",()=>{ const [src,i]=r.dataset.open.split(":"); state.detailDose=null; go("detail",[src,+i]); })); }
+  if(s==="detail"){
+    $("#panel-detail").innerHTML = detailScreen();
+    $("#panel-detail").querySelectorAll("[data-dose]").forEach(b=>b.addEventListener("click",()=>{ state.detailDose=+b.dataset.dose; render(); }));
   }
-  if(state.tab==="other"){
-    const O = DATA.other;
-    $("#panel-other").innerHTML = rules(O.general, "Key rules for other chronic medication") +
-      `<p class="note">Rows marked <span class="grade warnb">verify</span> are universal practice but were not checked against an individual guideline record for this build. Non-European sources (UK, US) are used where no ESAIC/ESC/DGAI recommendation exists and are named in the grade. Grades: ESC class/level; DGAI A (soll) / B (sollte) / 0 (kann).</p>` +
-      renderList(O.drugs, d=>d.doses[0]);
-  }
-  if(state.tab==="planner") renderPlanner();
-  if(state.tab==="ref"){
+  if(s==="planner") renderPlanner();
+  if(s==="ref"){
     const T = DATA.doseTable, R = DATA.tables;
     const tbl = (t) => `<p class="note">${t.src}${t.verify?' <span class="grade warnb">verify</span>':''}</p><div class="scroll"><table class="ref"><tr>${t.cols.map(c=>`<th>${c}</th>`).join("")}</tr>${t.rows.map(r=>`<tr>${r.map((c,i)=>`<td>${i===0&&t.cols.length===4?`<strong>${c}</strong>`:c}</td>`).join("")}</tr>`).join("")}</table></div>${t.note?`<p class="note">${t.note}</p>`:""}`;
-    const blockTbl = `<p class="note">ESAIC/ESRA 2022 Table 2. * = column assignment unclear in the extracted PDF — verify. The list is neither definitive nor absolute; institutional categorisation may differ.</p><div class="scroll"><table class="ref"><tr><th>Region</th><th style="color:var(--red)">Deep / neuraxial — intervals apply</th><th style="color:var(--ok)">Superficial — no interval required</th></tr>${DATA.blocks.map(r=>`<tr><td><strong>${esc(r.region)}</strong></td><td>${r.items.filter(i=>i[1]==="deep").map(i=>esc(i[0])+(i[2]?" *":"")).join("<br>")}</td><td>${r.items.filter(i=>i[1]==="superficial").map(i=>esc(i[0])+(i[2]?" *":"")).join("<br>")}</td></tr>`).join("")}</table></div>`;
-    $("#panel-ref").innerHTML =
-      `<h3 class="th">1 · Nerve blocks: deep vs superficial</h3>${blockTbl}
-       <h3 class="th">2 · Surgical cardiovascular risk</h3>${tbl(R.surgicalRisk)}
-       <h3 class="th">3 · Procedural bleeding risk</h3>${tbl(R.bleedingRisk)}
-       <h3 class="th">4 · Thrombotic risk of the patient</h3>${tbl(R.thromboticRisk)}
-       <h3 class="th">5 · DOAC dose categories</h3>
-       <p class="note">${T.note}</p>
-       <div class="scroll"><table class="ref">
-         <tr><th>Indication</th><th>Category</th><th>Rivaroxaban</th><th>Apixaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>
-         ${T.rows.map(r=>`<tr><td>${r[0]}</td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`).join("")}
-       </table></div>
-       <h3 style="margin-top:24px;font-size:1rem">Other dose thresholds</h3>
-       <ul class="note">
-         <li>LMWH: low ≤ 50 IU anti-Xa/kg/day (enoxaparin 40 mg, dalteparin 5000 IU, nadroparin 5700 IU, tinzaparin 4500 IU per day); high = above.</li>
-         <li>UFH: low ≤ 200 IU/kg/day SC or ≤ 100 IU/kg/day IV; high = above.</li>
-         <li>Fondaparinux: low 2.5 mg/day; high 5–10 mg/day.</li>
-         <li>Aspirin: low &lt; 200 mg/day; high ≥ 200 mg/day.</li>
-       </ul>`;
+    const blockTbl = `<p class="note">ESAIC/ESRA 2022 Table 2. * = column assignment unclear in the extracted PDF — verify.</p><div class="scroll"><table class="ref"><tr><th>Region</th><th style="color:var(--red)">Deep / neuraxial — intervals apply</th><th style="color:var(--ok)">Superficial — no interval</th></tr>${DATA.blocks.map(r=>`<tr><td><strong>${esc(r.region)}</strong></td><td>${r.items.filter(i=>i[1]==="deep").map(i=>esc(i[0])+(i[2]?" *":"")).join("<br>")}</td><td>${r.items.filter(i=>i[1]==="superficial").map(i=>esc(i[0])+(i[2]?" *":"")).join("<br>")}</td></tr>`).join("")}</table></div>`;
+    $("#panel-ref").innerHTML = `<h3 class="th">1 · Nerve blocks: deep vs superficial</h3>${blockTbl}<h3 class="th">2 · Surgical cardiovascular risk</h3>${tbl(R.surgicalRisk)}<h3 class="th">3 · Procedural bleeding risk</h3>${tbl(R.bleedingRisk)}<h3 class="th">4 · Thrombotic risk of the patient</h3>${tbl(R.thromboticRisk)}<h3 class="th">5 · DOAC dose categories</h3><p class="note">${T.note}</p>
+       <div class="scroll"><table class="ref"><tr><th>Indication</th><th>Category</th><th>Rivaroxaban</th><th>Apixaban</th><th>Edoxaban</th><th>Dabigatran</th></tr>${T.rows.map(r=>`<tr><td>${r[0]}</td><td><strong>${r[1]}</strong></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`).join("")}</table></div>
+       <h3 class="th">6 · Other dose thresholds</h3><ul class="note"><li>LMWH: low ≤ 50 IU anti-Xa/kg/day (enoxaparin 40 mg, dalteparin 5000 IU, nadroparin 5700 IU, tinzaparin 4500 IU per day); high = above.</li><li>UFH: low ≤ 200 IU/kg/day SC or ≤ 100 IU/kg/day IV; high = above.</li><li>Fondaparinux: low 2.5 mg/day; high 5–10 mg/day.</li><li>Aspirin: low &lt; 200 mg/day; high ≥ 200 mg/day.</li></ul>`;
   }
-  $("#footer").innerHTML = `<p><strong>Sources</strong></p>` +
-    DATA.sources.map(s=>`<p>${esc(s.key)} — ${esc(s.text)} <a href="${s.url}" target="_blank" rel="noopener">link</a></p>`).join("") +
-    `<p>Data version ${esc(DATA.version)} · ${esc(DATA.editor)}${DATA.issuesUrl?` · <a href="${DATA.issuesUrl}" target="_blank" rel="noopener">Report an error</a>`:""}</p>`;
+  $("#footer").innerHTML = s==="home" ? `<p>${esc(DATA.disclaimer)}</p><p><strong>Sources</strong></p>` + DATA.sources.map(x=>`<p>${esc(x.key)} — ${esc(x.text)} <a href="${x.url}" target="_blank" rel="noopener">link</a></p>`).join("") + `<p>${esc(DATA.editor)}${DATA.issuesUrl?` · <a href="${DATA.issuesUrl}" target="_blank" rel="noopener">Report an error</a>`:""}</p>` : "";
 }
-
-document.querySelectorAll(".top .chips").forEach(c=>c.addEventListener("click", e=>{
-  const b = e.target.closest("button[data-k]"); if(!b) return;
-  state[b.dataset.k] = b.dataset.v; if(b.dataset.k==="block") state.blockName=""; render();
-}));
-document.querySelectorAll('[role="tab"]').forEach(t=>t.addEventListener("click",()=>{ state.tab = t.id.replace("tab-",""); render(); window.scrollTo({top:0}); }));
+document.querySelectorAll(".top .chips").forEach(c=>c.addEventListener("click", e=>{ const b=e.target.closest("button[data-k]"); if(!b) return; state[b.dataset.k]=b.dataset.v; if(b.dataset.k==="block") state.blockName=""; render(); }));
+$("#back").addEventListener("click", ()=>{ if(state.screen==="detail") go(state.detail[0]); else go("home"); });
+window.addEventListener("popstate", ()=>{ if(state.screen!=="home"){ if(state.screen==="detail") go(state.detail[0]); else go("home"); } });
 const qi = $("#q");
-qi.addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); $("#searchBox").classList.toggle("has", !!state.q); render(); });
+qi.addEventListener("input", e=>{ state.q = e.target.value.trim().toLowerCase(); $("#searchBox").classList.toggle("has", !!state.q); render(); qi.focus(); });
 $("#clear").addEventListener("click", ()=>{ qi.value=""; state.q=""; $("#searchBox").classList.remove("has"); render(); qi.focus(); });
 render();
 if("serviceWorker" in navigator){

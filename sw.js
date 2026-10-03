@@ -1,7 +1,7 @@
 // Service worker: offline support + fully automatic updates.
 // Nothing to edit after changing files on GitHub — the app checks for a new
 // version on every launch and reloads itself when one is found.
-const CACHE = "periopmeds-v9";
+const CACHE = "periopmeds-v11";
 const FILES = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
